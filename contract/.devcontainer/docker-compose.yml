@@ -1,0 +1,8 @@
+version: "3"
+services:
+  app:
+    image: ubuntu
+    entrypoint: /bin/sh
+    tty: true
+    volumes:
+      - ../:/workspace

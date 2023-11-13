@@ -1,0 +1,31 @@
+{
+    "title": "tokenId 1001 Asset MetaData",
+    "type": "object",
+    "image": "https://ipfs.io/ipfs/bafybeih2r4xcwvnvvmdc4pzk7wh67hojxoejo5g2xrvkt4vrqpjd3e5nqa/1001.png",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Identifies the asset to which this NFT represents"
+        },
+        "description": {
+            "type": "string",
+            "description": ""
+        },
+        "image": {
+            "type": "string",
+            "description": "https://ipfs.io/ipfs/bafybeih2r4xcwvnvvmdc4pzk7wh67hojxoejo5g2xrvkt4vrqpjd3e5nqa/1001.png"
+        }
+    },
+    "redemptions": {
+        "operator-tokenId-redemptionId": {
+            "status": {
+                "type": "string",
+                "description": "The status of a redemption. Enum type can be used to represent the redemption status, such as redeemed, shipping, paid."
+            },
+            "description": {
+                "type": "string",
+                "description": "Describes the object that has been redeemed for an NFT, such as the name of an action figure series name or the color of the product."
+            }
+        }
+    }
+}

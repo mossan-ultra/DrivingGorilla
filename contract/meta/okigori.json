@@ -1,0 +1,23 @@
+{
+    "type": "okigori",
+    "name": "kensirou",
+    "createdAt": "2023/10/1 00:00:00",
+    "image": "https://gori",
+    "location": "",
+    "運転距離tokenBalanceOf": "100",
+    "エコ運転tokenBalanceOf": "200",
+    "安全運転tokenBalanceOf": "300",
+    "給油tokenBalanceOf": "400",
+    "運転時間tokenBalanceOf": "500"
+}
+
+自分のウォレット                                おきゴリアフター                        運営ウォレット
+"運転距離tokenBalanceOf": "1000",
+900                                 100
+"エコ運転tokenBalanceOf": "1000",
+800                                 200
+"安全運転tokenBalanceOf": "1000",
+700             transfer            300
+"給油tokenBalanceOf": "1000",
+600                                 400
+"運転時間tokenBalanceOf": "1000"500                                500

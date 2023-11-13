@@ -1,0 +1,254 @@
+
+require("dotenv").config();
+const { ethers, ContractFactory, Wallet } = require("ethers");
+const fs = require('fs');
+const { ThirdwebSDK } = require("@thirdweb-dev/sdk");
+const { AvalancheFuji } = require("@thirdweb-dev/chains");
+
+function ethers2wei(ethers) {
+    // return ethers.utils.parseEther(ethers)
+    return (Number(ethers) * 10 ** 18).toString()
+}
+async function main() {
+    const GoriToken = JSON.parse(fs.readFileSync('./artifacts-zk/contracts/GoriToken.sol/GoriToken.json', 'utf8'));
+    const Drive = JSON.parse(fs.readFileSync('./artifacts-zk/contracts/Drive.sol/Drive.json', 'utf8'));
+    const GoriDrop = JSON.parse(fs.readFileSync('./artifacts-zk/contracts/GoriDrop.sol/GoriDrop.json', 'utf8'));
+    const GoriStaking = JSON.parse(fs.readFileSync('./artifacts-zk/contracts/GoriStaking.sol/GoriStaking.json', 'utf8'));
+    const GoriNFT = JSON.parse(fs.readFileSync('./artifacts-zk/contracts/GoriNFT.sol/GoriNFT.json', 'utf8'));
+    const sdk = ThirdwebSDK.fromPrivateKey(process.env.PRIVATE_KEY, AvalancheFuji, {
+        clientId: `${process.env.THIRDWEB_CLIENT_ID}`, // Use client id if using on the client side, get it from dashboard settings
+        secretKey: `${process.env.THIRDWEB_SECRET_KEY}`, // Use secret key if using on the server, get it from dashboard settings
+    });
+
+    const from = await sdk.wallet.getAddress();
+
+    const erc1155contract = await sdk.getContract(process.env.ERC1155_CONTRACT_ADDRESS, GoriToken.abi);
+    const driveContract = await sdk.getContract(process.env.DRIVE_CONTRACT_ADDRESS, Drive.abi);
+    const goriDropContract = await sdk.getContract(process.env.AIRDROP_CONTRACT_ADDRESS, GoriDrop.abi);
+    const goriStakingContract = await sdk.getContract(process.env.STAKING_CONTRACT_ADDRESS, GoriStaking.abi);
+    const goriNFTContract = await sdk.getContract(process.env.GORINFT_CONTRACT_ADDRESS, GoriNFT.abi);
+
+    // エアドロの設定
+    await erc1155contract.call(
+        "setApprovalForAll",
+        [
+            process.env.AIRDROP_CONTRACT_ADDRESS, true
+        ],
+    )
+    await goriDropContract.call(
+        "changeERC1155Contract",
+        [
+            process.env.ERC1155_CONTRACT_ADDRESS
+        ],
+    )
+
+    console.log('Air Drop Setting:done')
+
+    //ドライブインセンティブコントラクトの設定をする
+    await driveContract.call(
+        "changeGoriTokenContract",
+        [
+            process.env.ERC1155_CONTRACT_ADDRESS
+        ],
+    )
+    console.log('Insentive Token Contract Setting:done')
+
+    //ゴリステの設定
+    await erc1155contract.call(
+        "setGoriStaking",
+        [
+            process.env.STAKING_CONTRACT_ADDRESS
+        ],
+    )
+    console.log('setup GoriStaking:done')
+
+    await goriStakingContract.call(
+        "changeStakingToken",
+        [
+            process.env.ERC1155_CONTRACT_ADDRESS
+        ],
+    )
+    console.log(`changeStakingToken ${process.env.ERC1155_CONTRACT_ADDRESS}:done`)
+
+    // GoriNFT setting
+    const nftminter = process.env.ERC1155_CONTRACT_ADDRESS;
+    await goriNFTContract.call(
+        "addMinter",
+        [
+            nftminter
+        ],
+    )
+    await erc1155contract.call(
+        "setGoriNFT",
+        [
+            process.env.GORINFT_CONTRACT_ADDRESS
+        ],
+    )
+
+    console.log(`goriNFTContract addMinter->${nftminter} :done`)
+
+
+    //ステーキング報酬用に大量にミントしておく
+    const rewardAmount = ethers.utils.parseEther('100');
+    await erc1155contract.call(
+        "mint",
+        [
+            process.env.STAKING_CONTRACT_ADDRESS, 1, rewardAmount
+        ],
+    )
+    await erc1155contract.call(
+        "mint",
+        [
+            process.env.STAKING_CONTRACT_ADDRESS, 2, rewardAmount
+        ],
+    )
+    await erc1155contract.call(
+        "mint",
+        [
+            process.env.STAKING_CONTRACT_ADDRESS, 3, rewardAmount
+        ],
+    )
+    await erc1155contract.call(
+        "mint",
+        [
+            process.env.STAKING_CONTRACT_ADDRESS, 4, rewardAmount
+        ],
+    )
+    await erc1155contract.call(
+        "mint",
+        [
+            process.env.STAKING_CONTRACT_ADDRESS, 5, rewardAmount
+        ],
+    )
+    console.log('transfer staking token:done')
+
+
+    // 相棒ゴリを生成する
+    const mintAmount = 1000;
+    await erc1155contract.call(
+        "mint",
+        [
+            from, 0, mintAmount
+        ],
+    );
+    console.log(`Mint Partner Gori:done, to ${from} ammount=${mintAmount} minted`)
+
+    // NFTミントポイントを設定する
+    const mintinfos = [
+        // https://jstatmap.e-stat.go.jp/map.html
+        {
+            //東京タワー
+            location: 53393599, tokenId: 1001, equipment: {
+                name: "鉄の盾", category: 'shield', description: 'A fairly hard iron shield. Female gorillas will no longer like you.',
+                imageUri: 'https://ipfs.io/ipfs/bafybeig5wtqwj7a56lzy443hbzhzoc3k27sjrymq3intjvtaqlbknft5x4/_957b5e81-fcde-4189-a6d5-a027693dcee9.jpeg',
+                driving: ethers2wei('0.1'), eco: ethers2wei('0.1'), distance: ethers2wei('0.1'), safe: ethers2wei('0.1'), refuling: ethers2wei('0.1')
+            },
+        },
+        {
+            // 東京ディズニーランド
+            location: 53393750, tokenId: 1002, equipment: {
+                name: "Weak wooden weapon", category: 'weapon', description: 'It seems weak anyway. I also started losing at pachinko.',
+                imageUri: 'https://ipfs.io/ipfs/bafybeic6ktoeg3y5hzvfdsuaiyywsimlwqby62tecgqz74asvmqjq5hlnq/_d9ad95ca-58cf-42b3-85f7-c5abd64a0c4b.jpeg',
+                driving: ethers2wei('0.02'), eco: ethers2wei('0.01'), distance: ethers2wei('0.5'), safe: ethers2wei('1'), refuling: ethers2wei('0.003')
+            },
+        },
+        {
+            // 東京駅
+            location: 53394611,
+            tokenId: 1003,
+            equipment: {
+                name: "アルミのメリケンサック",
+                category: 'weapon',
+                description: 'ゴリラ界の最新技術でアルミホイルを加工して作ったメリケンサック。殴ると曲がる。',
+                imageUri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Brass_knuckles_dsc04623.jpg/500px-Brass_knuckles_dsc04623.jpg',
+                driving: ethers2wei('0.04'), eco: ethers2wei('0.04'), distance: ethers2wei('0.04'), safe: ethers2wei('0.04'), refuling: ethers2wei('0.04')
+            },
+        },
+        {
+            // 大阪駅
+            location: 52350349,
+            tokenId: 1004,
+            equipment: {
+                name: "苦無(錆)",
+                category: 'weapon',
+                description: 'ゴリラが栃木県の山奥で拾った苦無。おそらく日光江戸村産のレプリカ。',
+                imageUri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Kunai05.jpg/440px-Kunai05.jpg',
+                driving: ethers2wei('2'), eco: ethers2wei('3'), distance: ethers2wei('2'), safe: ethers2wei('5'), refuling: ethers2wei('0.0008')
+            },
+        },
+
+        {
+            // 長万部
+            location: 63406310,
+            tokenId: 1005,
+            equipment: {
+                name: "まんべくん",
+                category: 'weapon',
+                description: '最強のかに。暗黒大陸の住人。あと三回変身できる',
+                imageUri: 'https://ipfs.io/ipfs/bafybeihkihabqosgfr43f4txulhpjusnsphn4kf34gt3dneirrvsfadhym/manbekun-624x1024.png',
+                driving: ethers2wei('5'), eco: ethers2wei('5'), distance: ethers2wei('5'), safe: ethers2wei('5'), refuling: ethers2wei('5')
+            },
+        },
+        {
+            // 奈良
+            location: 52350623,
+            tokenId: 1006,
+            equipment: {
+                name: "せんとくん",
+                category: 'weapon',
+                description: '装備すると仏感が増して後光がさす。しかし能力は低く後光以上の効果は期待できない',
+                imageUri: 'https://www.pref.nara.jp/secure/125341/piisu_thumb.png',
+                driving: ethers2wei('0.000001'), eco: ethers2wei('0.000001'), distance: ethers2wei('0.000001'), safe: ethers2wei('0.000001'), refuling: ethers2wei('0.000001')
+            },
+        },
+        {
+            // マツダミュージアム
+            location: 51324338,
+            tokenId: 1007,
+            equipment: {
+                name: "マツダのピアス",
+                category: 'accessories',
+                description: 'これをつければあなたもマツダの一員！',
+                imageUri: 'https://ipfs.io/ipfs/bafybeicmw5f724cxzlyy6omwa5ohkigltisvp5i4txjkf2y2s2k4mn3iyi/mz.jpeg',
+                driving: ethers2wei('0.1'), eco: ethers2wei('1'), distance: ethers2wei('0.9'), safe: ethers2wei('0.3'), refuling: ethers2wei('0.003')
+            },
+        },
+
+
+    ];
+    await mintinfos.reduce((promise, mintinfo) => {
+        return promise.then(async () => {
+            await driveContract.call(
+                "addLocation",
+                [
+                    mintinfo.location, mintinfo.tokenId
+                ],
+            )
+            console.log(`add location ${mintinfo.location}->${mintinfo.tokenId}: done`)
+
+        });
+    }, Promise.resolve());
+    await mintinfos.reduce((promise, mintinfo) => {
+        return promise.then(async () => {
+            const equipment = mintinfo.equipment;
+            await erc1155contract.call(
+                "addEquipment",
+                [
+                    mintinfo.tokenId, [equipment.name, equipment.category, equipment.description, equipment.imageUri, equipment.driving, equipment.eco, equipment.distance, equipment.safe, equipment.refuling]
+                ],
+            )
+            console.log(`add equpment ${mintinfo.tokenId}->${equipment.name}: done`)
+
+        });
+    }, Promise.resolve());
+    console.log(`add location: done`)
+
+}
+
+// We recommend this pattern to be able to use async/await everywhere
+// and properly handle errors.
+main().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+});
+
