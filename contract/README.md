@@ -31,6 +31,12 @@
 - UX向上のためにアカウントアブストラクションに対応しています
 
 # コントラクトの構成
+Drive：運転データを登録するコントラクト
+GoriDrop：エアドロップのコントロール
+GoriToken：経験値トークン、装備NFTのMint、管理
+GoriNFT：装備NFTの交換先ERC721のMint、管理
+GoriStaking：置きゴリのステーキングを管理
+
 <img width="662" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/1950a279-1934-4bd0-93b5-056637c8b0f0">
 
 
