@@ -23,7 +23,7 @@ async function main() {
         process.env.PRIVATE_KEY,
         provider
     );
-    
+
     const from = await signer.getAddress();
 
     console.log(process.env.ERC1155_CONTRACT_ADDRESS)
@@ -106,8 +106,8 @@ async function main() {
         {
             //東京タワー
             location: 53393599, tokenId: 1001, equipment: {
-                name: "steel shield", category: 'shield', description: 'A fairly hard iron shield. Female gorillas will no longer like you.',
-                imageUri: 'https://dalleproduse.blob.core.windows.net/private/images/1c882950-fb0b-4ca7-a476-c3748defb7d2/generated_00.png?se=2023-10-14T07%3A29%3A55Z&sig=iXxfL2hX4rtDtCylEv6XBU%2FmZxzrdYT%2F8NI9jmMXm7M%3D&ske=2023-10-16T08%3A21%3A44Z&skoid=09ba021e-c417-441c-b203-c81e5dcd7b7f&sks=b&skt=2023-10-09T08%3A21%3A44Z&sktid=33e01921-4d64-4f8c-a055-5bdaffd5e33d&skv=2020-10-02&sp=r&spr=https&sr=b&sv=2020-10-02',
+                name: "鉄の盾", category: 'shield', description: 'A fairly hard iron shield. Female gorillas will no longer like you.',
+                imageUri: 'https://ipfs.io/ipfs/bafybeig5wtqwj7a56lzy443hbzhzoc3k27sjrymq3intjvtaqlbknft5x4/_957b5e81-fcde-4189-a6d5-a027693dcee9.jpeg',
                 driving: ethers2wei('0.1'), eco: ethers2wei('0.1'), distance: ethers2wei('0.1'), safe: ethers2wei('0.1'), refuling: ethers2wei('0.1')
             },
         },
@@ -115,12 +115,13 @@ async function main() {
             // 東京ディズニーランド
             location: 53393750, tokenId: 1002, equipment: {
                 name: "Weak wooden weapon", category: 'weapon', description: 'It seems weak anyway. I also started losing at pachinko.',
-                imageUri: 'https://dalleproduse.blob.core.windows.net/private/images/a1202425-8d33-4707-bc58-f85cf55f29c2/generated_00.png?se=2023-10-14T07%3A36%3A24Z&sig=3ZOKQmnL4y9I%2Fv0NCqOKH%2FdSOAWbnJv6o0UtlbT3wnc%3D&ske=2023-10-16T08%3A22%3A51Z&skoid=09ba021e-c417-441c-b203-c81e5dcd7b7f&sks=b&skt=2023-10-09T08%3A22%3A51Z&sktid=33e01921-4d64-4f8c-a055-5bdaffd5e33d&skv=2020-10-02&sp=r&spr=https&sr=b&sv=2020-10-02',
+                imageUri: 'https://ipfs.io/ipfs/bafybeic6ktoeg3y5hzvfdsuaiyywsimlwqby62tecgqz74asvmqjq5hlnq/_d9ad95ca-58cf-42b3-85f7-c5abd64a0c4b.jpeg',
                 driving: ethers2wei('0.02'), eco: ethers2wei('0.01'), distance: ethers2wei('0.5'), safe: ethers2wei('1'), refuling: ethers2wei('0.003')
             },
         },
         {
-            location: 300,
+            // 東京駅
+            location: 53394611,
             tokenId: 1003,
             equipment: {
                 name: "アルミのメリケンサック",
@@ -131,7 +132,8 @@ async function main() {
             },
         },
         {
-            location: 400,
+            // 大阪駅
+            location: 52350349,
             tokenId: 1004,
             equipment: {
                 name: "苦無(錆)",
@@ -150,7 +152,7 @@ async function main() {
                 name: "まんべくん",
                 category: 'weapon',
                 description: '最強のかに。暗黒大陸の住人。あと三回変身できる',
-                imageUri: 'http://gotouchi-chara.jp/wp_jlca/wp-content/uploads/2020/03/manbekun-624x1024.png',
+                imageUri: 'https://ipfs.io/ipfs/bafybeihkihabqosgfr43f4txulhpjusnsphn4kf34gt3dneirrvsfadhym/manbekun-624x1024.png',
                 driving: ethers2wei('5'), eco: ethers2wei('5'), distance: ethers2wei('5'), safe: ethers2wei('5'), refuling: ethers2wei('5')
             },
         },
@@ -166,7 +168,18 @@ async function main() {
                 driving: ethers2wei('0.000001'), eco: ethers2wei('0.000001'), distance: ethers2wei('0.000001'), safe: ethers2wei('0.000001'), refuling: ethers2wei('0.000001')
             },
         },
-
+        {
+            // マツダミュージアム
+            location: 51324338,
+            tokenId: 1007,
+            equipment: {
+                name: "マツダのピアス",
+                category: 'accessories',
+                description: 'これをつければあなたもマツダの一員！',
+                imageUri: 'https://ipfs.io/ipfs/bafybeicmw5f724cxzlyy6omwa5ohkigltisvp5i4txjkf2y2s2k4mn3iyi/mz.jpeg',
+                driving: ethers2wei('0.1'), eco: ethers2wei('1'), distance: ethers2wei('0.9'), safe: ethers2wei('0.3'), refuling: ethers2wei('0.003')
+            },
+        },
     ];
     await mintinfos.reduce((promise, mintinfo) => {
         return promise.then(async () => {

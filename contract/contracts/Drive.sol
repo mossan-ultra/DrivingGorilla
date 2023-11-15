@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./interface/IGoriToken.sol";
 import "@thirdweb-dev/contracts/extension/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "hardhat/console.sol";
 
 // 運転データを登録するコントラクト
@@ -21,14 +20,10 @@ contract Drive is Ownable {
     uint256 public constant SafeDriveBoundary = 70; //安全運転レベルのトークンを払い出す境界値
     uint256 public constant SafeDriveReward = 1 ether; //安全運転レベルを達成した時に払い出すトークンの量
     uint256 public constant RefuelingReward = 1 ether; //一度の給油に対して払い出すトークンの量
-    // reward token = (distanse / DistanceBoundary) * DistanceReward
-    // 端数は切り捨て
-    uint256 public constant DistanceBoundary = 10; //運転距離に対してトークンを払い出す境界値
-    uint256 public constant DistanceReward = 0.1 ether; //運転距離を達成した場合に払い出すトークンの量
-    // reward token = (time / TimeBoundary) * TimeReward
-    // 端数は切り捨て
-    uint256 public constant TimeBoundary = 10; //運転時間に対してトークンを払い出す境界値
-    uint256 public constant TimeReward = 0.1 ether; //運転時間に対して払い出すトークンの量
+    uint256 public constant DistanceBoundary = 100; //運転距離に対してトークンを払い出す境界値
+    uint256 public constant DistanceReward = 1 ether; //運転距離を達成した場合に払い出すトークンの量
+    uint256 public constant TimeBoundary = 100; //運転時間に対してトークンを払い出す境界値
+    uint256 public constant TimeReward = 1 ether; //運転時間に対して払い出すトークンの量
 
     // RewardトークンのID
     uint256 public constant TokenIdDrivingTime = 1; //運転時間
@@ -67,6 +62,7 @@ contract Drive is Ownable {
 
     // 運転データを登録する
     function drivedata(
+        address from,
         uint ecolevel,
         uint safelevel,
         uint refuelingCount,
@@ -75,49 +71,20 @@ contract Drive is Ownable {
         uint256[] memory _locations
     ) external {
         if (safelevel > SafeDriveBoundary) {
-            goritoken.mint(msg.sender, TokenIdSafeDrive, SafeDriveReward);
+            goritoken.mint(from, TokenIdSafeDrive, SafeDriveReward);
         }
         if (ecolevel > EcoDriveBoundary) {
-            goritoken.mint(msg.sender, TokenIdEcoDrive, EcoDriveReward);
+            goritoken.mint(from, TokenIdEcoDrive, EcoDriveReward);
         }
-        {
-            (bool success, uint256 coefficient) = SafeMath.tryDiv(
-                distance,
-                DistanceBoundary
-            );
-
-            if (success) {
-                uint256 rewardDistanceToken = coefficient * DistanceReward;
-                if (rewardDistanceToken > 0) {
-                    goritoken.mint(
-                        msg.sender,
-                        TokenIdDrivingDistance,
-                        rewardDistanceToken
-                    );
-                }
-            }
+        if (distance > DistanceBoundary) {
+            goritoken.mint(from, TokenIdDrivingDistance, DistanceReward);
         }
-        {
-            (bool success, uint256 coefficient) = SafeMath.tryDiv(
-                time,
-                TimeBoundary
-            );
-
-            if (success) {
-                uint256 rewardTimeToken = coefficient * TimeReward;
-                if (rewardTimeToken > 0) {
-                    goritoken.mint(
-                        msg.sender,
-                        TokenIdDrivingTime,
-                        rewardTimeToken
-                    );
-                }
-            }
+        if (time > TimeBoundary) {
+            goritoken.mint(from, TokenIdDrivingTime, TimeReward);
         }
-
         if (refuelingCount > 0) {
             goritoken.mint(
-                msg.sender,
+                from,
                 TokenIdRefueling,
                 refuelingCount * RefuelingReward
             );
@@ -125,7 +92,7 @@ contract Drive is Ownable {
         for (uint256 i; i < _locations.length; ++i) {
             uint256 tokenid = locations[_locations[i]];
             if (tokenid > 0) {
-                goritoken.mint(msg.sender, tokenid, 1);
+                goritoken.mint(from, tokenid, 1);
             }
         }
     }
