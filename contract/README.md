@@ -1,47 +1,57 @@
-## Getting Started
+運転をより楽しくをテーマに設計されたドラゴリのコントラクトです。
 
-Create a project using this example:
+# 主要概念
 
-```bash
-npx thirdweb create --contract --template hardhat-javascript-starter
+## 相棒ゴリ
+ ユーザーは一人の相棒ゴリを所有することができます
+ 相棒ゴリはエアドロップで入手することができる。
+
+## 経験値トークン
+運転データをオンチェーン上に保存し、データに応じたトークンをミントします。このトークンは相棒ゴリの強さパラメータとなります
+- tokenId1 = 運転時間に応じたトークン
+- tokenId2 = エコドライブに応じたトークン
+- tokenId3 = 運転距離に応じたトークン
+- tokenId4 = 安全運転に応じたトークン
+- tokenId5 = 給油回数に応じたトークン
+
+## 装備NFT
+特定地点を訪れるとERC1155NFTトークンがミントされます。メタ情報には経験値トークンが記載され、相棒ゴリの強さを上乗せすることができます
+
+## おきゴリ
+任意の地点に分身のゴリラを置いてくることができる。
+おきゴリはステーキング機能を有していて、作成時に経験値トークンのIDと量、ステーキング期間を指定するとステーキングができます。
+（ステーキングに渡したトークンは相棒ゴリから引かれます）
+ステーキング期間中には一定確率で脱獄し、脱獄してしまうとステーキングしたトークンはバーンされてしまいます。
+
+## その他
+- UX向上のためにアカウントアブストラクションに対応しています
+
+# ビルド方法
+```
+npx hardhat compile
 ```
 
-You can start editing the page by modifying `contracts/Contract.sol`.
+# デプロイ方法
+デプロイに使用するエンドポイントの設定をscript/deploy.jsで行います。
+Fujiにデプロイする場合
+const chainType = thirdWeb;
 
-To add functionality to your contracts, you can use the `@thirdweb-dev/contracts` package which provides base contracts and extensions to inherit. The package is already installed with this project. Head to our [Contracts Extensions Docs](https://portal.thirdweb.com/contractkit) to learn more.
+zKatanaにデプロイする場合
+const chainType = starTale;
 
-## Building the project
-
-After any changes to the contract, run:
-
-```bash
-npm run build
-# or
-yarn build
+```
+node script/deploy.js
 ```
 
-to compile your contracts. This will also detect the [Contracts Extensions Docs](https://portal.thirdweb.com/contractkit) detected on your contract.
-
-## Deploying Contracts
-
-When you're ready to deploy your contracts, just run one of the following command to deploy you're contracts:
-
-```bash
-npm run deploy
-# or
-yarn deploy
+# セットアップ方法
+## Fuji
+```
+node script/setup.js
 ```
 
-## Releasing Contracts
-
-If you want to release a version of your contracts publicly, you can use one of the followings command:
-
-```bash
-npm run release
-# or
-yarn release
+## zKatana
+```
+setup_zKatana.js
 ```
 
-## Join our Discord!
 
-For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
