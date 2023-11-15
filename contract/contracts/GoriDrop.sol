@@ -26,6 +26,7 @@ contract GoriDrop is AirdropERC1155, Ownable {
 
     // 相棒ゴリをエアドロップする
     function goridrop(
+        address from,
         address _tokenAddress,
         address _tokenOwner,
         AirdropContent[] calldata _contents
@@ -33,7 +34,7 @@ contract GoriDrop is AirdropERC1155, Ownable {
         // ThirdwebのairdropERC1155を参考にして以下のように変える
         // ・誰でもエアドロ可能
         // ・ウォレットアドレスに対して一度のみエアドロ可能
-        require(erc1155.balanceOf(_msgSender(), 0) == 0, "Already airdropped");
+        require(erc1155.balanceOf(from, 0) == 0, "Already airdropped");
         uint256 len = _contents.length;
 
         for (uint256 i = 0; i < len; ) {

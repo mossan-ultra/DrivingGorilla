@@ -139,18 +139,19 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
 
     // 装備NFTを交換用NFTに変換する
     // 変換した装備NFTはバーンされる
-    function toERC721(uint256 tokenId) external {
-        _burn(_msgSender(), tokenId, 1);
-        _goriNFT.mint(_msgSender(), erc721tokenIds[tokenId]);
+    function toERC721(address from, uint256 tokenId) external {
+        _burn(from, tokenId, 1);
+        _goriNFT.mint(from, erc721tokenIds[tokenId]);
     }
 
     // 相棒ゴリラを初期化する
     function initializeGori(
+        address from,
         string memory name,
         string memory createdAt,
         string memory imageUri
     ) external {
-        _gorimeta[_msgSender()] = PartnarGoriMeta({
+        _gorimeta[from] = PartnarGoriMeta({
             name: name,
             createdAt: createdAt,
             imageUri: imageUri
@@ -158,19 +159,23 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
     }
 
     // 相棒ゴリラの名前を変更する
-    function updatePartnerGoriName(string memory name) external {
-        _gorimeta[_msgSender()].name = name;
+    function updatePartnerGoriName(address from, string memory name) external {
+        _gorimeta[from].name = name;
     }
 
     // 相棒ゴリラの画像を変更する
-    function updatePartnerGoriImageUri(string memory imageUri) external {
-        _gorimeta[_msgSender()].imageUri = imageUri;
+    function updatePartnerGoriImageUri(
+        address from,
+        string memory imageUri
+    ) external {
+        _gorimeta[from].imageUri = imageUri;
     }
 
     // 置き去りゴリラを生成する
     // ・新たな相棒ゴリをミントする
     // ・指定されたトークンをステーキングする
     function makeStayGori(
+        address from,
         uint256 location,
         string memory imageUri,
         uint256[] memory tokenIds,
@@ -179,21 +184,12 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
     ) external {
         uint256 mintTokenId = nextTokenIdStayGori;
         require(period > 0, "period is zero");
-        require(
-            !stayGori[_msgSender()][mintTokenId].registerd,
-            "Allready staked"
-        );
+        require(!stayGori[from][mintTokenId].registerd, "Allready staked");
 
-        _mint(_msgSender(), mintTokenId, 1, "");
-        _goriStaking.multiStake(
-            mintTokenId,
-            tokenIds,
-            amounts,
-            period,
-            _msgSender()
-        );
+        _mint(from, mintTokenId, 1, "");
+        _goriStaking.multiStake(mintTokenId, tokenIds, amounts, period, from);
 
-        stayGori[_msgSender()][mintTokenId] = StayGoriMeta({
+        stayGori[from][mintTokenId] = StayGoriMeta({
             imageUri: imageUri,
             tokenIds: tokenIds,
             amounts: amounts,
@@ -204,11 +200,11 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
         });
 
         emit StayGoriMinted(
-            _msgSender(),
-            stayGori[_msgSender()][mintTokenId].imageUri,
-            stayGori[_msgSender()][mintTokenId].period,
-            stayGori[_msgSender()][mintTokenId].createdAt,
-            stayGori[_msgSender()][mintTokenId].registerd,
+            from,
+            stayGori[from][mintTokenId].imageUri,
+            stayGori[from][mintTokenId].period,
+            stayGori[from][mintTokenId].createdAt,
+            stayGori[from][mintTokenId].registerd,
             location,
             mintTokenId
         );
@@ -218,62 +214,73 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
     // ステーキング期間が完了したおきゴリのファイナライズを行う
     // 脱獄した場合、ステーキングしたトークンはバーンされる
     // 脱獄していない場合、ステーキング報酬が当該ウォレットに転送される
-    function completeStayGori(uint256 tokenId) external {
-        require(stayGori[_msgSender()][tokenId].registerd, "not registered");
-        require(_isStayGoriComplete(tokenId), "not completed yet");
-        stayGori[_msgSender()][tokenId].registerd = false;
+    function completeStayGori(address from, uint256 tokenId) external {
+        require(stayGori[from][tokenId].registerd, "not registered");
+        require(_isStayGoriComplete(from, tokenId), "not completed yet");
+        stayGori[from][tokenId].registerd = false;
 
-        uint256 _escapeBlock = _getEscapeBlock(tokenId);
-        if (_isEscape(tokenId)) {
+        uint256 _escapeBlock = _getEscapeBlock(from, tokenId);
+        if (_isEscape(from, tokenId)) {
             // 脱獄した場合はデポジットされたトークンをバーンする
             _burnBatch(
                 address(_goriStaking),
-                stayGori[_msgSender()][tokenId].tokenIds,
-                stayGori[_msgSender()][tokenId].amounts
+                stayGori[from][tokenId].tokenIds,
+                stayGori[from][tokenId].amounts
             );
             // 脱走したら登録を解除する
-            emit EscapeGori(_msgSender(), tokenId, _escapeBlock);
+            emit EscapeGori(from, tokenId, _escapeBlock);
         } else {
             // 脱走してなかったら報酬を払い出す
-            _goriStaking.claimRewards(tokenId, _msgSender());
-            emit CompleteStayGori(_msgSender(), tokenId, block.number);
+            _goriStaking.claimRewards(tokenId, from);
+            emit CompleteStayGori(from, tokenId, block.number);
         }
     }
 
     // おきゴリが登録されていることを確認する
-    function isRegistered(uint256 tokenId) external view returns (bool) {
-        return stayGori[_msgSender()][tokenId].registerd;
+    function isRegistered(
+        address from,
+        uint256 tokenId
+    ) external view returns (bool) {
+        return stayGori[from][tokenId].registerd;
     }
 
     // おきゴリステーキング期間が完了していることを確認する
-    function isStayGoriComplete(uint256 tokenId) external view returns (bool) {
-        require(stayGori[_msgSender()][tokenId].registerd, "not registered");
-        return _isStayGoriComplete(tokenId);
+    function isStayGoriComplete(
+        address from,
+        uint256 tokenId
+    ) external view returns (bool) {
+        require(stayGori[from][tokenId].registerd, "not registered");
+        return _isStayGoriComplete(from, tokenId);
     }
 
     // おきゴリステーキングにデポジットしたトークン量を確認する
     function getStayGoriDepositToken(
+        address from,
         uint256 tokenId
     ) external view returns (uint256[] memory, uint256[] memory) {
-        require(stayGori[_msgSender()][tokenId].registerd, "not registered");
+        require(stayGori[from][tokenId].registerd, "not registered");
         return (
-            stayGori[_msgSender()][tokenId].tokenIds,
-            stayGori[_msgSender()][tokenId].amounts
+            stayGori[from][tokenId].tokenIds,
+            stayGori[from][tokenId].amounts
         );
     }
 
     // おきゴリが脱獄していないかチェックする
-    function getEscape(uint256 tokenId) external view returns (bool, uint256) {
-        require(stayGori[_msgSender()][tokenId].registerd, "not registered");
-        return _goriStaking.getEscapeBlock(tokenId, _msgSender());
+    function getEscape(
+        address from,
+        uint256 tokenId
+    ) external view returns (bool, uint256) {
+        require(stayGori[from][tokenId].registerd, "not registered");
+        return _goriStaking.getEscapeBlock(tokenId, from);
     }
 
     // おきゴリのメタ情報を作成する
     function createMetaStayGori(
+        address from,
         uint256 tokenId
     ) internal view returns (string memory) {
-        require(stayGori[_msgSender()][tokenId].registerd, "not registered");
-        StayGoriMeta memory staygori = stayGori[_msgSender()][tokenId];
+        require(stayGori[from][tokenId].registerd, "not registered");
+        StayGoriMeta memory staygori = stayGori[from][tokenId];
         bytes memory bytesLocation = Golib.formatJson(
             "location",
             Strings.toString(staygori.location)
@@ -369,8 +376,10 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
     }
 
     // 相棒ゴリのメタ情報を作成する
-    function careteMetaPartnerGori() internal view returns (string memory) {
-        PartnarGoriMeta memory meta = _gorimeta[_msgSender()];
+    function careteMetaPartnerGori(
+        address from
+    ) internal view returns (string memory) {
+        PartnarGoriMeta memory meta = _gorimeta[from];
 
         bytes memory bytesName = Golib.formatJson("name", meta.name);
         bytes memory bytesDesc = Golib.formatJson("description", "");
@@ -401,47 +410,55 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
     }
 
     // メタ情報を作成する
-    function uri(
+    function myuri(
+        address from,
         uint256 tokenID_
-    ) public view override returns (string memory) {
+    ) public view returns (string memory) {
         if (tokenID_ == TokenIdPartnerGori) {
-            return careteMetaPartnerGori();
+            return careteMetaPartnerGori(from);
         } else if (
             tokenID_ >= TokenIdEquipmentMIN && tokenID_ <= TokenIdEquipmentMAX
         ) {
             return createMetaEqupment(tokenID_);
         } else if (tokenID_ >= TokenIdStayGori) {
-            return createMetaStayGori(tokenID_);
+            return createMetaStayGori(from, tokenID_);
         }
         return "";
     }
 
     function stayGoriUri(
+        address from,
         uint256 tokenID_,
         uint256 location
     ) public view returns (string memory) {
         require(tokenID_ == TokenIdStayGori, "unsupport tokenId");
-        require(stayGori[_msgSender()][location].registerd, "not registered");
+        require(stayGori[from][location].registerd, "not registered");
         if (tokenID_ == TokenIdStayGori) {
-            return createMetaStayGori(location);
+            return createMetaStayGori(from, location);
         }
         return "";
     }
 
-    function _isStayGoriComplete(uint256 tokenId) internal view returns (bool) {
-        return _goriStaking.isComplete(tokenId, _msgSender());
+    function _isStayGoriComplete(
+        address from,
+        uint256 tokenId
+    ) internal view returns (bool) {
+        return _goriStaking.isComplete(tokenId, from);
     }
 
-    function _isEscape(uint256 tokenId) internal view returns (bool) {
-        (bool _result, ) = _goriStaking.getEscapeBlock(tokenId, _msgSender());
+    function _isEscape(
+        address from,
+        uint256 tokenId
+    ) internal view returns (bool) {
+        (bool _result, ) = _goriStaking.getEscapeBlock(tokenId, from);
         return _result;
     }
 
-    function _getEscapeBlock(uint256 tokenId) internal view returns (uint256) {
-        (, uint256 _escapeBlock) = _goriStaking.getEscapeBlock(
-            tokenId,
-            _msgSender()
-        );
+    function _getEscapeBlock(
+        address from,
+        uint256 tokenId
+    ) internal view returns (uint256) {
+        (, uint256 _escapeBlock) = _goriStaking.getEscapeBlock(tokenId, from);
         return _escapeBlock;
     }
 
@@ -465,5 +482,18 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
         returns (bytes calldata)
     {
         return ERC2771ContextUpgradeable._msgData();
+    }
+
+    function burn(address from, uint256 id, uint256 amount) public override {
+        require(from != address(0), "FROM_ZERO_ADDR");
+
+        address operator = msg.sender;
+        uint256 fromBalance = balanceOf[from][id];
+        require(fromBalance >= amount, "INSUFFICIENT_BAL");
+        unchecked {
+            balanceOf[from][id] = fromBalance - amount;
+        }
+
+        emit TransferSingle(operator, from, address(0), id, amount);
     }
 }
