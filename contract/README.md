@@ -55,7 +55,7 @@ node script/setup.js
 
 ## zKatana
 ```
-setup_zKatana.js
+node script/setup_zKatana.js
 ```
 
 
