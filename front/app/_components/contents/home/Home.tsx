@@ -29,6 +29,17 @@ export const Home = () => {
   const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
   const [inputName, setInputName] = useState('');
 
+  const Delete = async () => {
+    const initialData =
+      await tokenContract!.interface.encodeFunctionData("burn",
+        [
+          wallet.address, 0, 1
+        ]
+      );
+    await tokenContract?.txWithGelate(initialData, wallet.provider!, wallet.web3Auth!)
+
+  }
+
   const makeBuddy = async () => {
     setStatus(Status.Drop)
     const contents = [[
