@@ -1,6 +1,4 @@
-import { useWallet } from "@/app/_hooks/useWallet";
-import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Swiper from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -10,15 +8,15 @@ import { Footer } from "./_components/footer/footer";
 import { Header } from "./_components/header/Header";
 import styles from "./mainPageWrapper.module.css";
 import { Register } from "./_components/register/register";
+import Login from "./login/login";
+import { providers } from "ethers";
+import { WalletContext } from "./context/wallet";
 
 export default function MainPageWrapper() {
   const [swiper, setSwiper] = useState<Swiper | null>(null);
   const handleSwiperChange = (newSwiper: Swiper): void => setSwiper(newSwiper);
-  const { connected, setConnetWalletInfo } = useWallet();
-  const address = useAddress();
-  useEffect(() => {
-    setConnetWalletInfo(address != undefined, address as string);
-  }, [address, setConnetWalletInfo]);
+  // const { connected, connectWallet, setConnetWalletInfo } = useWallet();
+  const { connected } = useContext(WalletContext);
 
   return (
     <>
@@ -39,7 +37,7 @@ export default function MainPageWrapper() {
           </p>
 
           <div className={styles.walletConnectButton}>
-            <ConnectWallet />
+            <Login />
           </div>
         </div>
       )}

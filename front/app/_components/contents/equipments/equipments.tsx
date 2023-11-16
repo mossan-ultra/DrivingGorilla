@@ -1,23 +1,15 @@
-import {
-  walletAddressAtom,
-  walletConnectionAtom,
-} from "@/app/_recoil/atoms/web3";
-import Image from "next/image";
-import { useRecoilValue } from "recoil";
 import { Equipment, useEquipments } from "../../../_hooks/useEquipments";
 import parentClasses from "../contents.module.css";
 import classes from "./equipments.module.css";
-import { Canvas } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { HoloEffectCard } from "../holoEffectCard";
-import THREE from "three";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { WalletContext } from "@/app/context/wallet";
 
 export const Equipments = () => {
-  const walletAddress = useRecoilValue(walletAddressAtom);
-  const connected = useRecoilValue(walletConnectionAtom);
-  const { equipments, isLoading } = useEquipments(walletAddress);
+  const wallet = useContext(WalletContext);
+  const { equipments, isLoading } = useEquipments(wallet.address as string);
   const [opened, { open, close }] = useDisclosure(false);
   const [selectEquipment, setSelectEquipment] = useState<Equipment>();
   function modalOpen(eqipment: Equipment) {
@@ -77,7 +69,7 @@ export const Equipments = () => {
           Equipments
         </h1>
         <div className={classes.list_container} data-swiper-parallax="-200">
-          {connected ? (
+          {wallet.connected ? (
             isLoading ? (
               <div>Now loading...</div>
             ) : (

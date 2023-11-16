@@ -2,13 +2,17 @@ import { DRIVE_CONTRACT_ADDRESS } from "@/app/_const/contracts";
 import { getContract } from "@/app/_utils/contract";
 import { Modal, Table, Title } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
-import { useAddress, useContract, useSDK } from "@thirdweb-dev/react";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
 import { BuildMode, buildMode } from "@/app/_utils/buildMode";
 import bg from "../../../public/images/register.jpeg";
 import styles from "./register.module.css";
+import { useContract } from "@/app/_hooks/useContract";
+import DriveContractAbi from "../../_abi/Drive.json";
+
+const targetAddress = "0x47A9064a8D242860ABb43FC8340B3680487CC088";
 import { useBuddyGori } from "@/app/_hooks/useBuddyGori";
+import { WalletContext } from "@/app/context/wallet";
 
 export const Register = () => {
     enum Status {
@@ -21,12 +25,14 @@ export const Register = () => {
     }
 
     const [opened, { open, close }] = useDisclosure(false);
-    const address = useAddress()
     const [status, setStatus] = useState(Status.IDLE);
-    const { contract: driveContract, isLoading: isContractLoading } = useContract(DRIVE_CONTRACT_ADDRESS);
+    const { contract: driveContract, isLoading: isContractLoading } = useContract(DRIVE_CONTRACT_ADDRESS, DriveContractAbi.abi);
     const [blockNumber, setBlockNumber] = useState();
     const [mintAmount, setMintAmount] = useState<TokenAmount[]>([]);
     const refFirstRef = useRef(true);
+    const wallet = useContext(WalletContext);
+
+
     const { name, imgUrl, isLoading, isHoldBuddy } = useBuddyGori();
 
     const driveDemoData = [
@@ -35,7 +41,7 @@ export const Register = () => {
         1,      //refuelingCount
         343,   //distance
         376,   //time
-        [0x032eb8bf, 63406310, 52350623]
+        []
     ];
     const tableData = [
         { name: 'Eco Drive Score', amount: driveDemoData[0] },
@@ -75,10 +81,10 @@ export const Register = () => {
         }
 
         const contract = getContract();
-        const filter = contract.filters.TransferSingle(null, null, address, null, null)
+        const filter = contract.filters.TransferSingle(null, null, wallet.address, null, null)
         contract.on(filter, (operator, from, to, id, amount) => {
 
-            if (to === address) {
+            if (to === wallet.address) {
                 let name = "";
                 switch (Number(id)) {
                     case 1:
@@ -99,7 +105,6 @@ export const Register = () => {
                         break;
                 }
 
-                console.log(id, name)
                 const tokenAmount: TokenAmount = {
                     id: id.toString(),
                     name: name, amount: amount.toString()
@@ -114,13 +119,20 @@ export const Register = () => {
     const registerDrivingData = async () => {
         setStatus(Status.TrasactionCall)
 
-        const res = await driveContract!.call(
-            "drivedata",
-            [
-                ...driveDemoData
-            ],
-        );
-        setBlockNumber(res.receipt.blockNumber)
+        const data =
+            await driveContract!.interface.encodeFunctionData("drivedata",
+                [
+                    wallet.address,
+                    61,   //ecolevel
+                    72,   //safelevel
+                    1,      //refuelingCount
+                    343,   //distance
+                    376,   //time
+                    [53393599]]
+            );
+        await driveContract?.txWithGelate(data, wallet.provider!, wallet.web3Auth!)
+
+        // setBlockNumber(res.receipt.blockNumber)
         // receiptの中身でもできそうな気がしたがDecordうまくいかなった
         // const events = res.receipt.events;
         // const abiCoder = ethers.utils.defaultAbiCoder;
@@ -141,7 +153,7 @@ export const Register = () => {
             case Status.IDLE:
                 return (
                     <>
-                        <Title order={3}>Register yesterday's driving data. Click the gorilla button to proceed.</Title>
+                        <Title order={3}>{'Register yesterdays driving data. Click the gorilla button to proceed.'}</Title>
                         <div className={styles.container}>
                             <div
                                 className={styles.button}
@@ -160,20 +172,20 @@ export const Register = () => {
             case Status.TrasactionCall:
                 return (
                     <>
-                        <Title order={3}>Executing transaction to register driving data…</Title>
+                        <Title order={3}>{'Executing transaction to register driving data…'}</Title>
                     </>
                 )
             case Status.Check:
                 return (
                     <>
-                        <Title order={3}>Checking issued token…</Title>
+                        <Title order={3}>{'Checking issued token…'}</Title>
                     </>
                 )
             case Status.Finish:
             default:
                 return (
                     <>
-                        <Title order={3}>The following tokens were minted!!</Title>
+                        <Title order={3}>{'The following tokens were minted!!'}</Title>
                         <Table>
                             <Table.Tbody>{mintTokenRows(mintAmount.filter(element => Number(element.id) <= 5).sort((a, b) => Number(a.id) - Number(b.id)))}</Table.Tbody>
                         </Table>

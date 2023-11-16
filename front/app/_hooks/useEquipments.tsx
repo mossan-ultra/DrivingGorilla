@@ -1,11 +1,10 @@
 "use client";
 
 import { Contract, ethers } from "ethers";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { walletConnectionAtom } from "../_recoil/atoms/web3";
+import { useContext, useEffect, useState } from "react";
 import { base64Decode } from "../_utils/common";
 import { getContract } from "../_utils/contract";
+import { WalletContext } from "../context/wallet";
 
 // 装備のデータ
 export type Equipment = {
@@ -32,9 +31,8 @@ const equipmentReviver = (k: string, v: string) => {
 export const useEquipments = (walletAddress: string) => {
   // Contractインスタンス作成
   const contract: Contract = getContract();
+  const wallet = useContext(WalletContext);
 
-  // 財布接続状況
-  const isWalletConnected = useRecoilValue(walletConnectionAtom);
 
   // 対象のウォレットが持つ装備のIDを取得
   const [equipments, setEquipments] = useState<Equipment[]>([]);
@@ -42,7 +40,7 @@ export const useEquipments = (walletAddress: string) => {
 
   useEffect(() => {
     // 財布がつながっていない場合は処理をしない
-    if (isWalletConnected) {
+    if (wallet.connected) {
       (async () => {
         // 発行されたEquipmentのTokenIDのログ(Event)を取得
         // 装備はメタ情報が変わらない前提なので、Event検索でおk
@@ -64,7 +62,7 @@ export const useEquipments = (walletAddress: string) => {
           if (owner !== walletAddress) continue;
 
           // 装備IDを元に装備詳細を取得
-          const equipment64 = await contract.uri(tokenId);
+          const equipment64 = await contract.myuri(walletAddress, tokenId);
           const json = await base64Decode(equipment64);
           let e: Equipment = JSON.parse(json, equipmentReviver);
           e.driving = Number(ethers.utils.formatEther(e.driving.toString()));
@@ -79,7 +77,7 @@ export const useEquipments = (walletAddress: string) => {
         setIsLoading(false);
       })();
     }
-  }, [isWalletConnected, walletAddress]);
+  }, [wallet]);
 
   return {
     equipments,

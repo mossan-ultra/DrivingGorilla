@@ -45,7 +45,7 @@ export const ChatbotMessages: FC<Props> = ({ image, chatname, chatlog, chattime}
       <div>
         <div className="text-sm font-bold">{chatname}</div>
         <div className="mt-2 gap-2">
-          <div className="max-w-md text-sm bg-emerald-950/50">
+          <div className="max-w-md bg-emerald-950/50 text-sm">
             {
               chatlogs(chatbotmessage)
             }

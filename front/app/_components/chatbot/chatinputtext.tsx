@@ -30,7 +30,7 @@ export const ChatInputText: FC<Props> = ({ onSubmit }) => {
 
   return (
     <textarea
-      className="w-full rounded-lg outline-none bg-indigo-700/50"
+      className="w-full rounded-lg bg-indigo-700/50 outline-none"
       onChange={handleChange}
       onKeyDown={handleKeyDown}
       onCompositionStart={() => setIsComposition(true)}
