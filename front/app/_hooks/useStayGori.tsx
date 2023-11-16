@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { getContract } from "../_utils/contract";
 import { Contract } from "ethers";
-import { walletConnectionAtom } from "../_recoil/atoms/web3";
-import { useRecoilValue } from "recoil";
+import { WalletContext } from "../context/wallet";
 
 export type StayGori = {
   location: number;
@@ -21,12 +20,12 @@ export type UseStayGoriResult = {
 export const useStayGori: () => UseStayGoriResult = () => {
   const [isLoading, setIsLoading] = useState(true);
   const contract: Contract = getContract();
-  const isWalletConnected = useRecoilValue(walletConnectionAtom);
   const [staygoris, setStayGoris] = useState<StayGori[]>([]);
+  const wallet = useContext(WalletContext);
 
   useEffect(() => {
     const _stayGori: StayGori[] = [];
-    if (isWalletConnected) {
+    if (wallet.connected) {
       (async () => {
         const recv = await contract.queryFilter(
           contract.filters.StayGoriMinted()
@@ -50,7 +49,7 @@ export const useStayGori: () => UseStayGoriResult = () => {
         setIsLoading(false);
       })();
     }
-  }, [contract, isWalletConnected]);
+  }, [contract, wallet]);
 
   return {
     staygoris: staygoris,

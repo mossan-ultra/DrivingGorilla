@@ -1,45 +1,45 @@
-import { useAddress, useSigner } from "@thirdweb-dev/react";
-import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { walletConnectionAtom } from "../_recoil/atoms/web3";
+import { useContext, useEffect, useState } from "react";
 import { base64Decode } from "../_utils/common";
-import { getContractWithSigner } from "../_utils/contract";
+import { getContract, getContractWithSigner } from "../_utils/contract";
+import { useContract } from "./useContract";
+import GoriTokenAbi from "../_abi/GoriToken.json";
+import { GORITOKEN_CONTRACT_ADDRESS } from "../_const/contracts";
+import { WalletContext } from "../context/wallet";
 
 const BUDDY_GORI_TOKEN_ID = 0;
 
 export const useBuddyGori = () => {
   // 財布接続状況
-  const isWalletConnected = useRecoilValue(walletConnectionAtom);
+  const wallet = useContext(WalletContext);
   const overrides = {
-    from: useAddress(),
+    from: wallet.address,
   };
 
   // Metamaskをproviderとしたcontractを利用
-  const contract = getContractWithSigner(useSigner());
+  // const { contract, isLoading: isContractLoading } = useContract(GORITOKEN_CONTRACT_ADDRESS, GoriTokenAbi.abi);
+  const contract = getContract();
 
   const [name, setName] = useState("");
   const [imgUrl, setImgUrl] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isHoldBuddy, setIsHoldBuddy] = useState(false);
-  const address = useAddress();
 
   useEffect(() => {
-    if (isWalletConnected) {
+    if (wallet.connected) {
       (async () => {
         // Token0のデータを取得
-        const balance = await contract.balanceOf(address, BUDDY_GORI_TOKEN_ID);
+        const myGori64 = await contract!.myuri(wallet.address, BUDDY_GORI_TOKEN_ID);
+        const balance = await contract.balanceOf(wallet.address, BUDDY_GORI_TOKEN_ID);
         setIsHoldBuddy(balance > 0);
 
-        const myGori64 = await contract.uri(BUDDY_GORI_TOKEN_ID, overrides);
         const json = await base64Decode(myGori64);
-        console.log(json);
         const myGori = JSON.parse(json);
         setName(myGori.name);
         setImgUrl(myGori.image);
         setIsLoading(false);
       })();
     }
-  }, [isWalletConnected]);
+  }, [wallet]);
 
   return {
     name,

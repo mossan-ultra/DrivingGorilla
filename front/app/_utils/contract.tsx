@@ -19,7 +19,7 @@ export const getContract = (): Contract => {
   }
   // RPC
   const rpcUrl =
-    `https://avalanche-fuji.infura.io/v3/${process.env.NEXT_PUBLIC_INFULA_CLIENT_ID}`;
+    `https://rpc.startale.com/zkatana`;
 
   // Providerインスタンス作成
   const provider = new ethers.providers.JsonRpcProvider(rpcUrl);

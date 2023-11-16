@@ -1,30 +1,31 @@
 "use client";
-import { useWallet } from "@/app/_hooks/useWallet";
+import { WalletContext } from "@/app/context/wallet";
 import classes from "./header.module.css";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { useContext, useState } from "react";
+import WalletDialog from "./walletDialog";
+import { Tube } from "@react-three/drei";
 export const WalletIcon = () => {
-  const { connected, connectWallet } = useWallet();
+  const wallet = useContext(WalletContext);
+  const [dialogShow, setDialogShow] = useState(false);
 
   const customButton = () => (
     <div
-      onClick={connectWallet} // ボタン要素の外でクリックハンドラを設定
+    // onClick={connectWallet} // ボタン要素の外でクリックハンドラを設定
     >
       <img
         src="icons/header.png"
-        className={connected ? classes.btn : classes.btn_disconnected}
+        className={wallet.connected ? classes.btn : classes.btn_disconnected}
         alt=""
+        onClick={() => setDialogShow(true)}
       />
     </div>
   );
   return (
     <>
-      <ConnectWallet
-        // detailsBtn プロパティにカスタムボタンを指定
-        detailsBtn={customButton}
-        theme="light"
-        btnTitle="ゴリ"
-        modalTitleIconUrl=""
+      {customButton()}
+      <WalletDialog show={dialogShow} onClose={() => {
+        setDialogShow(false)
+      }}
       />
     </>
   );

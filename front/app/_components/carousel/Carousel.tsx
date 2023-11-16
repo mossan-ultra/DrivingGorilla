@@ -13,7 +13,7 @@ import "./styles.css";
 // import required modules
 import { Parallax } from "swiper/modules";
 import { Collection, Drive, Equipments, Home, Status } from "../contents";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BuildMode, buildMode } from "@/app/_utils/buildMode";
 
 type MyComponentProps = {

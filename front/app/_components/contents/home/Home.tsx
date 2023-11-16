@@ -2,14 +2,17 @@ import { Profile } from "../../profile/profile";
 import parentClasses from "../contents.module.css";
 import { useBuddyGori } from "@/app/_hooks/useBuddyGori";
 import Chatbot from '../../chatbot/Chatbot'
-import { useEffect, useState } from "react";
-import { useAddress, useContract } from "@thirdweb-dev/react";
+import { useContext, useEffect, useState } from "react";
 import bg from "../../../../public/images/makeButton.jpeg";
 import styles from "./home.module.css";
 import { Button, Modal, TextInput, Title } from "@mantine/core";
 import { AIRDROP_CONTRACT_ADDRESS, GORITOKEN_CONTRACT_ADDRESS } from "@/app/_const/contracts";
 import { GORI_OWNER } from "@/app/_const/wallets";
+import AirDropContract from "../../../_abi/GoriDrop.json";
+import TokenContract from "../../../_abi/GoriToken.json";
+import { useContract } from "@/app/_hooks/useContract";
 import { useDisclosure } from "@mantine/hooks";
+import { WalletContext } from "@/app/context/wallet";
 
 export const Home = () => {
   enum Status {
@@ -19,31 +22,34 @@ export const Home = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { name, imgUrl, isLoading, isHoldBuddy } = useBuddyGori();
-  const { contract: dropContract, isLoading: isLoadingDropContract } = useContract(AIRDROP_CONTRACT_ADDRESS);
-  const { contract: tokenContract, isLoading: isLoadingTokenContract } = useContract(GORITOKEN_CONTRACT_ADDRESS);
-  const address = useAddress();
+  const { contract: dropContract, isLoading: isLoadingDropContract } = useContract(AIRDROP_CONTRACT_ADDRESS, AirDropContract.abi);
+  const { contract: tokenContract, isLoading: isLoadingTokenContract } = useContract(GORITOKEN_CONTRACT_ADDRESS, TokenContract.abi);
+  const wallet = useContext(WalletContext);
+
+  const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
   const [inputName, setInputName] = useState('');
 
   const makeBuddy = async () => {
     setStatus(Status.Drop)
     const contents = [[
-      address, 0, 1
+      wallet.address, 0, 1
     ]];
+    const goriDropData =
+      await dropContract!.interface.encodeFunctionData("goridrop",
+        [
+          wallet.address, GORITOKEN_CONTRACT_ADDRESS, GORI_OWNER, contents
+        ]
+      );
+    await dropContract?.txWithGelate(goriDropData, wallet.provider!, wallet.web3Auth!)
 
-    const dropReceipt = await dropContract!.call(
-      "goridrop",
-      [
-        GORITOKEN_CONTRACT_ADDRESS, GORI_OWNER, contents
-      ]
-    );
     setStatus(Status.Initilize)
-
-    const initReceipt = await tokenContract!.call(
-      "initializeGori",
-      [
-        inputName, (new Date()).toDateString(), "https://ipfs.io/ipfs/bafybeiedu2fk3bb4oucoeuibtkvdku2nby4zzrxzvnzmpytfr7fbothwdy/buddy.gif"
-      ],
-    );
+    const initialData =
+      await tokenContract!.interface.encodeFunctionData("initializeGori",
+        [
+          wallet.address, "buddy", (new Date()).toDateString(), "https://ipfs.io/ipfs/bafybeiedu2fk3bb4oucoeuibtkvdku2nby4zzrxzvnzmpytfr7fbothwdy/buddy.gif"
+        ]
+      );
+    await tokenContract?.txWithGelate(initialData, wallet.provider!, wallet.web3Auth!)
     setStatus(Status.Normal)
   }
 
@@ -95,6 +101,15 @@ export const Home = () => {
       case Status.Normal:
         return (
           <>
+            {/* {相棒を殺す隠し機能} */}
+            {/* <div
+              className={styles.button}
+              style={{
+                backgroundImage: `url(${bg.src})`,
+              }}
+              onClick={() => Delete()}
+            ></div > */}
+
             <Profile /><Chatbot goriname={name} /></>
         )
     }

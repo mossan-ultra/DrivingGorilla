@@ -1,10 +1,6 @@
 import { useDriveTokens } from "@/app/_hooks/useDriveTokens";
 import { useEquipments } from "@/app/_hooks/useEquipments";
 import {
-  walletAddressAtom,
-  walletConnectionAtom,
-} from "@/app/_recoil/atoms/web3";
-import {
   Legend,
   PolarAngleAxis,
   PolarGrid,
@@ -12,8 +8,9 @@ import {
   RadarChart,
   ResponsiveContainer,
 } from "recharts";
-import { useRecoilValue } from "recoil";
 import classes from "./status.module.css";
+import { useContext } from "react";
+import { WalletContext } from "@/app/context/wallet";
 
 enum token {
   Driving,
@@ -24,16 +21,16 @@ enum token {
 }
 
 export const Chart = () => {
-  const walletAddress = useRecoilValue(walletAddressAtom);
-  const isWalletConnected = useRecoilValue(walletConnectionAtom);
+
+  const wallet = useContext(WalletContext);
 
   //ドライブで得た経験値を取得;
   const { amounts: driveTokens, isLoading: driveTokensIsLoading } =
-    useDriveTokens(walletAddress);
+    useDriveTokens(wallet.address as string);
 
   // 装備を取得
   const { equipments, isLoading: equipmentsIsLoading } =
-    useEquipments(walletAddress);
+    useEquipments(wallet.address as string);
 
   // 装備の各パラメータの装備を計算
   const equipmentParams = equipments.reduce(
@@ -85,7 +82,7 @@ export const Chart = () => {
 
   return (
     <>
-      {isWalletConnected ? (
+      {wallet.connected ? (
         <>
           {equipmentsIsLoading || driveTokensIsLoading ? (
             <div>Now Loading...</div>

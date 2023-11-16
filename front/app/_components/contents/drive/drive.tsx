@@ -1,10 +1,11 @@
 import parentClasses from "../contents.module.css";
 import { useBuddyGori } from "../../../_hooks/useBuddyGori";
 import { useStayGori } from "../../../_hooks/useStayGori";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GoriMap from "../../map/goriMap";
 import Chatbot from "../../chatbot/Chatbot";
-import { useAddress } from "@thirdweb-dev/react";
+import { WalletContext } from "@/app/context/wallet";
+
 
 interface OkiGoriParam {
   meshCode: string;
@@ -17,11 +18,11 @@ interface OkiGoriParam {
 //https://ipfs.io/ipfs/QmTt8EsiXAjyaLBjAbVEwMi2LZ8vyoTRM8FuCPhVQqc7xM/gorilla%20eating%20Takoyaki.png  変なゴリURL
 
 export const Drive = () => {
-  const address = useAddress();
   const { name, imgUrl, isLoading } = useBuddyGori();
   const { staygoris, isLoading: isStayGoriLoading } = useStayGori();
   const [currentLat, setCurrentLat] = useState<number | null>(null);
   const [currentLng, setCurrentLng] = useState<number | null>(null);
+  const wallet = useContext(WalletContext);
   useEffect(() => {
     // ブラウザが位置情報をサポートしているかを確認
     if ("geolocation" in navigator) {
@@ -39,7 +40,7 @@ export const Drive = () => {
     }
   }, []);
 
-  if (address === undefined) {
+  if (wallet.address === undefined) {
     return (
       <div className={parentClasses.container}>
         <div className={parentClasses.window}>
@@ -55,7 +56,7 @@ export const Drive = () => {
     //   String(staygori.location).length
     //);
     //console.log("staygori.location:", staygori.location);
-    return staygori.owner !== address && String(staygori.location).length === 8;
+    return staygori.owner !== wallet.address && String(staygori.location).length === 8;
   });
 
   return (

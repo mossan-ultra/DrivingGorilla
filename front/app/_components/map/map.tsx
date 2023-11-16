@@ -36,7 +36,6 @@ export const Map: React.FC<MapProps> = ({ children, style, ...options }) => {
       // マップ全体にクリックイベントを設定
       newMap.addListener("click", () => {
         // クリック時の処理
-        console.log("マップがクリックされました_中のconsole");
       });
 
       setMap(newMap);

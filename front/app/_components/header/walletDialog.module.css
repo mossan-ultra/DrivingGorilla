@@ -1,0 +1,8 @@
+.overflow {
+    display: flex;
+
+}
+
+.walletaddress {
+    overflow-wrap: anywhere;
+}
