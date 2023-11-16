@@ -1,0 +1,1 @@
+export const GORI_OWNER = "0x6e3D7bEA9A5eEb1b7e9f6A0E9a95e4636654e289"

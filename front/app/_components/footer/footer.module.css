@@ -1,0 +1,74 @@
+.footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  padding-top: 8px;
+  height: 116px;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  ul {
+    display: flex;
+    column-gap: 8px;
+    flex-shrink: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      flex: 1;
+      text-overflow: ellipsis;
+      overflow: hidden;
+
+      ul {
+        display: grid;
+        grid-template-columns: 1fr;
+        padding-bottom: 8px;
+      }
+
+      li {
+        text-align: center;
+        font-size: 10px;
+        color: rgb(255, 255, 255);
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+      }
+    }
+  }
+}
+
+.button_link {
+  background-size: cover;
+  background-position: center;
+  padding-top: 100%;
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  border: 1px solid white;
+  border-radius: 8px;
+}
+
+.button_link_drive {
+  composes: button_link;
+  background-image: url("/icons/drive.png");
+}
+
+.button_link_status {
+  composes: button_link;
+  background-image: url("/icons/status.png");
+}
+
+.button_link_home {
+  composes: button_link;
+  background-image: url("/icons/home.png");
+}
+
+.button_link_goricolle {
+  composes: button_link;
+  background-image: url("/icons/goricolle.png");
+}
+
+.button_link_equipments {
+  composes: button_link;
+  background-image: url("/icons/equipments.png");
+}

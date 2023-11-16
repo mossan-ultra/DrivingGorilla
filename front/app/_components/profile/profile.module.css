@@ -1,0 +1,21 @@
+.container {
+  padding: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  border: 1px solid white;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+}
+
+.text {
+  border: 1px solid white;
+  border-radius: 0 0 16px 16px;
+  padding: 8px;
+  font-size: 16px;
+}
