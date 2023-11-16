@@ -1,0 +1,39 @@
+.list_container {
+  padding: 0 4px;
+  display: block;
+  /* height: 100vh; */
+}
+
+.horizontal {
+  display: flex;
+}
+.canvas_container {
+  display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+}
+
+.canvas {
+  /* box-sizing: border-box; */
+  /* float: left; */
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  padding: 0 4px;
+  display: block;
+  /* top: 0;
+  left: 0;*/
+}
+.li_item_container {
+  display: left;
+  width: 100%;
+}
+.li {
+  display: flex;
+}
+.equipment_detail_container {
+  display: grid;
+  width: 100%;
+  justify-content: start;
+  align-content: stretch;
+}

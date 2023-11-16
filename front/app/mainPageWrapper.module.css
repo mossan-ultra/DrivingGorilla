@@ -1,0 +1,34 @@
+.main {
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+}
+
+.body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-position: center;
+  background-image: url(/images/background2.png);
+  filter: grayscale(100%);
+  z-index: 3;
+}
+
+.welcome {
+  font-style: normal;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.walletConnectButton {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: block;
+}

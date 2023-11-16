@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    text-align: center;
+    width: 150px;
+    height: 150px;
+    display: inline-block;
+    border-radius: 5px;
+    background-size: cover;
+    background-position: center;
+}

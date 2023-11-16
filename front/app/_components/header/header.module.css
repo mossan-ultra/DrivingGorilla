@@ -1,0 +1,67 @@
+.header {
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 116px;
+  width: 100vw;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.title {
+  font-size: 32px;
+  color: rgb(255, 255, 255);
+  letter-spacing: 2px;
+  text-shadow:
+    0 -1px #8d1010,
+    0 -2px #90e47b,
+    0 8px 15px rgba(238, 4, 250, 0.5);
+  margin: 0;
+  vertical-align: middle;
+  border-bottom: 1px solid white;
+}
+
+.icon {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid white;
+}
+
+.status {
+  color: white;
+  font-size: 12px;
+  text-align: center;
+}
+
+.btn {
+  background-image: url("/icons/header.png");
+  background-size: cover;
+  background-color: transparent;
+  filter: none;
+  transition: filter 2s;
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+  color: white;
+  font-size: 4vw;
+  font-weight: bolder;
+}
+
+.btn_disconnected {
+  composes: btn;
+  filter: grayscale(100);
+  background-image: url("/icons/header.png");
+  background-size: cover;
+  background-color: transparent;
+  border-radius: 8px;
+  width: 96px;
+  height: 96px;
+}

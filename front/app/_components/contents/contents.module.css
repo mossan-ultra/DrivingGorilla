@@ -1,0 +1,22 @@
+.container {
+  height: 100%;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.window {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  border: 1px solid white;
+  margin: 116px 0;
+  height: calc(100vh - 116px - 116px);
+  overflow: auto;
+}
+
+.title {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 24px;
+  border-bottom: 1px solid white;
+}
