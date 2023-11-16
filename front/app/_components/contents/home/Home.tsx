@@ -57,7 +57,7 @@ export const Home = () => {
     const initialData =
       await tokenContract!.interface.encodeFunctionData("initializeGori",
         [
-          wallet.address, "buddy", (new Date()).toDateString(), "https://ipfs.io/ipfs/bafybeiedu2fk3bb4oucoeuibtkvdku2nby4zzrxzvnzmpytfr7fbothwdy/buddy.gif"
+          wallet.address, inputName, (new Date()).toDateString(), "https://ipfs.io/ipfs/bafybeiedu2fk3bb4oucoeuibtkvdku2nby4zzrxzvnzmpytfr7fbothwdy/buddy.gif"
         ]
       );
     await tokenContract?.txWithGelate(initialData, wallet.provider!, wallet.web3Auth!)
