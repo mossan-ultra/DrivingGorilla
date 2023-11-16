@@ -496,4 +496,15 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
 
         emit TransferSingle(operator, from, address(0), id, amount);
     }
+
+    function setApprovalForAllGori(
+        address from,
+        address operator,
+        bool approved
+    ) public virtual {
+        address owner = from;
+        require(owner != operator, "APPROVING_SELF");
+        isApprovedForAll[owner][operator] = approved;
+        emit ApprovalForAll(owner, operator, approved);
+    }
 }
