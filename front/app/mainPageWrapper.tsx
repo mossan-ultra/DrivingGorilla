@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Swiper from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -11,12 +11,20 @@ import { Register } from "./_components/register/register";
 import Login from "./login/login";
 import { providers } from "ethers";
 import { WalletContext } from "./context/wallet";
+import { useBuddyGori } from "@/app/_hooks/useBuddyGori";
 
 export default function MainPageWrapper() {
   const [swiper, setSwiper] = useState<Swiper | null>(null);
+  const [isBuddy, setBuddy] = useState(false);
   const handleSwiperChange = (newSwiper: Swiper): void => setSwiper(newSwiper);
   // const { connected, connectWallet, setConnetWalletInfo } = useWallet();
   const { connected } = useContext(WalletContext);
+  const { name, imgUrl, isLoading, isHoldBuddy } = useBuddyGori();
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    setBuddy(isHoldBuddy)
+    console.log(isHoldBuddy)
+  }, [ref,isHoldBuddy]);
 
   return (
     <>
@@ -24,10 +32,12 @@ export default function MainPageWrapper() {
         <>
           <Header />
           <main>
-            <Register />
-            <Carousel onSwiperChange={handleSwiperChange} />
+            <div ref={ref} >
+              <Register />
+              <Carousel onSwiperChange={handleSwiperChange} />
+            </div>
           </main>
-          <Footer swiper={swiper} />
+          {isHoldBuddy ? <Footer swiper={swiper} /> : <></> }
         </>
       ) : (
         <div className={styles.body}>
