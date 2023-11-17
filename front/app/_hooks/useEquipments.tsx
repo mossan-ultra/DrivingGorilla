@@ -18,6 +18,11 @@ export type Equipment = {
   safe: number;
   refuling: number;
 };
+type EqupmentMeta = {
+  tokenId: string;
+  jsonString: string;
+};
+
 
 // 装備データをJSONから読み取る際に、特定要素に変換をかけるための関数
 const equipmentReviver = (k: string, v: string) => {
@@ -37,6 +42,7 @@ export const useEquipments = (walletAddress: string) => {
   // 対象のウォレットが持つ装備のIDを取得
   const [equipments, setEquipments] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const metaMap: EqupmentMeta[] = []
 
   useEffect(() => {
     // 財布がつながっていない場合は処理をしない
@@ -45,9 +51,8 @@ export const useEquipments = (walletAddress: string) => {
         // 発行されたEquipmentのTokenIDのログ(Event)を取得
         // 装備はメタ情報が変わらない前提なので、Event検索でおk
         const recv = await contract.queryFilter(
-          contract.filters.EquipmentMinted()
+          contract.filters.EquipmentMinted(wallet.address, null)
         );
-
         const tempEquipments = [];
 
         // ログからwalletが持ち主の装備を取得
@@ -62,8 +67,17 @@ export const useEquipments = (walletAddress: string) => {
           if (owner !== walletAddress) continue;
 
           // 装備IDを元に装備詳細を取得
-          const equipment64 = await contract.myuri(walletAddress, tokenId);
-          const json = await base64Decode(equipment64);
+          let json;
+          const meta = metaMap.find(meta => meta.tokenId.toString() === tokenId.toString());
+          if (meta) {
+            json = meta.jsonString;
+
+          } else {
+            const equipment64 = await contract.myuri(walletAddress, tokenId);
+            json = await base64Decode(equipment64);
+            metaMap.push({ tokenId: tokenId, jsonString: json })
+
+          }
           let e: Equipment = JSON.parse(json, equipmentReviver);
           e.driving = Number(ethers.utils.formatEther(e.driving.toString()));
           e.eco = Number(ethers.utils.formatEther(e.eco.toString()));
