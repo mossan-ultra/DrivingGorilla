@@ -8,7 +8,6 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
 export const Equipments = () => {
-  const connected = useContext(WalletContext);
   const wallet = useContext(WalletContext);
   const { equipments, isLoading } = useEquipments(wallet.toString());
   const [opened, { open, close }] = useDisclosure(false);
@@ -67,7 +66,7 @@ export const Equipments = () => {
           Equipments
         </h1>
         <div className={classes.list_container} data-swiper-parallax="-200">
-          {connected ? (
+          {wallet ? (
             isLoading ? (
               <div>Now loading...</div>
             ) : (
