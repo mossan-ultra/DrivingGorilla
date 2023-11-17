@@ -9,10 +9,9 @@ import { useDisclosure } from "@mantine/hooks";
 
 export const Equipments = () => {
   const wallet = useContext(WalletContext);
-  const { equipments, isLoading } = useEquipments(wallet.toString());
+  const { equipments, isLoading } = useEquipments(wallet.address as string);
   const [opened, { open, close }] = useDisclosure(false);
   const [selectEquipment, setSelectEquipment] = useState<Equipment>();
-
   function modalOpen(eqipment: Equipment) {
     setSelectEquipment(eqipment);
     open();
