@@ -96,4 +96,11 @@ contract Drive is Ownable {
             }
         }
     }
+
+    function checkin(address from, uint256 location) external {
+        uint256 tokenid = locations[location];
+        if (tokenid > 0) {
+            goritoken.mint(from, tokenid, 1);
+        }
+    }
 }
