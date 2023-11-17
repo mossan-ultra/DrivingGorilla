@@ -121,7 +121,7 @@ export const Home = () => {
               onClick={() => Delete()}
             ></div > */}
 
-            <Profile /><Chatbot goriname={name} /></>
+            <Profile /><Chatbot goriname={name} isViewLog={true} /></>
         )
     }
   }
