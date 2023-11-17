@@ -68,7 +68,7 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
     mapping(uint256 => string) internal erc721tokenIds;
 
     event PartnerMinted(address owner);
-    event EquipmentMinted(address owner, uint256 tokenID);
+    event EquipmentMinted(address indexed owner, uint256 tokenID);
     event StayGoriMinted(
         address owner,
         string imageUri,
