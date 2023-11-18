@@ -1,9 +1,8 @@
 import parentClasses from "../contents.module.css";
-import { useBuddyGori } from "../../../_hooks/useBuddyGori";
 import { useStayGori } from "../../../_hooks/useStayGori";
 import React, { useContext, useEffect, useState } from "react";
 import GoriMap from "../../map/goriMap";
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import { Table } from "@mantine/core";
 import {
   GORITOKEN_CONTRACT_ADDRESS,
@@ -15,6 +14,7 @@ import { useContract } from "@/app/_hooks/useContract";
 import { WalletContext } from "@/app/context/wallet";
 import TokenAbi from "../../../_abi/GoriToken.json";
 import { GelatoContract } from "@/app/gelato/gelatoContract";
+import { BuddyGoriContext } from "@/app/context/buddyGori";
 
 const tableOkigoriCellStyle = {
   border: "1px solid #ddd",
@@ -41,7 +41,7 @@ export const Collection = () => {
     useDriveTokens(wallet.address as string);
   const [isLoadingModal, setIsLoadingModal] = useState(false); // モーダル内のローディングフラグを追加
   const [okiGoriPeriod, setOkiGoriPeriod] = useState(1); // 初期値を1に設定（短い期間）
-  const { name, imgUrl, isLoading } = useBuddyGori();
+  const { name, imgUrl, isLoading, isHoldBuddy, deleteBuddy, reload } = useContext(BuddyGoriContext);
   const { staygoris, isLoading: isStayGoriLoading } = useStayGori();
   const [currentLat, setCurrentLat] = useState<number | null>(null);
   const [currentLng, setCurrentLng] = useState<number | null>(null);
@@ -128,6 +128,7 @@ export const Collection = () => {
     }
   }, [isGoriTokenContractLoading, driveTokensIsLoading]);
 
+
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -206,7 +207,7 @@ export const Collection = () => {
             currentLocation.latitude,
             currentLocation.longitude
           ).toString(),
-          imgUrl,
+          imgUrl as string,
           selectedValues,
           okiGoriPeriod
         );
@@ -366,7 +367,7 @@ export const Collection = () => {
           <GoriMap
             currentLat={currentLat}
             currentLng={currentLng}
-            myImageUrl={imgUrl}
+            myImageUrl={imgUrl as string}
             okigoriParams={filteredStaygoris}
             mode="GoriColle"
             showGoriDetail={true}

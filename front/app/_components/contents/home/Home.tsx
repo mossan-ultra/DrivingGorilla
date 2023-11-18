@@ -1,6 +1,5 @@
 import { Profile } from "../../profile/profile";
 import parentClasses from "../contents.module.css";
-import { useBuddyGori } from "@/app/_hooks/useBuddyGori";
 import Chatbot from '../../chatbot/Chatbot'
 import { useContext, useEffect, useState } from "react";
 import bg from "../../../../public/images/makeButton.jpeg";
@@ -13,6 +12,9 @@ import TokenContract from "../../../_abi/GoriToken.json";
 import { useContract } from "@/app/_hooks/useContract";
 import { useDisclosure } from "@mantine/hooks";
 import { WalletContext } from "@/app/context/wallet";
+import { BuddyGoriContext } from "@/app/context/buddyGori";
+import { GelatoContract } from "@/app/gelato/gelatoContract";
+import { BuildMode, buildMode } from "@/app/_utils/buildMode";
 
 export const Home = () => {
   enum Status {
@@ -21,7 +23,7 @@ export const Home = () => {
   const [status, setStatus] = useState(Status.Loading);
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { name, imgUrl, isLoading, isHoldBuddy } = useBuddyGori();
+  const { name, isLoading, isHoldBuddy, deleteBuddy, reload } = useContext(BuddyGoriContext);
   const { contract: dropContract, isLoading: isLoadingDropContract } = useContract(AIRDROP_CONTRACT_ADDRESS, AirDropContract.abi);
   const { contract: tokenContract, isLoading: isLoadingTokenContract } = useContract(GORITOKEN_CONTRACT_ADDRESS, TokenContract.abi);
   const wallet = useContext(WalletContext);
@@ -37,9 +39,8 @@ export const Home = () => {
         ]
       );
     await tokenContract?.txWithGelate(initialData, wallet.provider!, wallet.web3Auth!)
+    deleteBuddy();
 
-    // Footerだけをリロードさせたいが上手く動作できないため一旦全体をリロード
-    window.location.reload()
   }
 
   const makeBuddy = async () => {
@@ -55,9 +56,6 @@ export const Home = () => {
       );
     await dropContract?.txWithGelate(goriDropData, wallet.provider!, wallet.web3Auth!)
 
-    // Footerだけをリロードさせたいが上手く動作できないため一旦全体をリロード
-    window.location.reload()
-
     setStatus(Status.Initilize)
     const initialData =
       await tokenContract!.interface.encodeFunctionData("initializeGori",
@@ -66,7 +64,9 @@ export const Home = () => {
         ]
       );
     await tokenContract?.txWithGelate(initialData, wallet.provider!, wallet.web3Auth!)
+    reload();
     setStatus(Status.Normal)
+
   }
 
   useEffect(() => {
@@ -118,15 +118,17 @@ export const Home = () => {
         return (
           <>
             {/* {相棒を殺す隠し機能} */}
-            <div
-              className={styles.button}
-              style={{
-                backgroundImage: `url(${bg.src})`,
-              }}
-              onClick={() => Delete()}
-            ></div >
+            {buildMode() == BuildMode.Develop &&
+              <div
+                className={styles.button}
+                style={{
+                  backgroundImage: `url(${bg.src})`,
+                }}
+                onClick={() => Delete()}
+              ></div >
+            }
 
-            <Profile /><Chatbot goriname={name} isViewLog={true} /></>
+            <Profile /><Chatbot goriname={name as string} isViewLog={true} /></>
         )
     }
   }
