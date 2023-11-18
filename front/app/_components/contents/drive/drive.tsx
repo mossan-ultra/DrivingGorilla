@@ -5,6 +5,9 @@ import React, { useContext, useEffect, useState } from "react";
 import GoriMap from "../../map/goriMap";
 import Chatbot from "../../chatbot/Chatbot";
 import { WalletContext } from "@/app/context/wallet";
+import CheckInButton from "../../checkInButton";
+import { Button } from "@mantine/core";
+import { BuildMode, buildMode } from "@/app/_utils/buildMode";
 
 
 interface OkiGoriParam {
@@ -64,6 +67,7 @@ export const Drive = () => {
       <div className={parentClasses.window}>
         <h1 className={parentClasses.title} data-swiper-parallax="-300">
           Drive
+
         </h1>
         {!isLoading && currentLat && currentLng && !isStayGoriLoading ? (
           <GoriMap
@@ -83,7 +87,34 @@ export const Drive = () => {
         ) : !name ? (
           <div>最初に相棒ゴリラを受け取ってください</div>
         ) : (
-          <Chatbot goriname={name} />
+          <>
+            <div style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap", justifyContent: "space-evenly", alignItems: "center" }}>
+              <Chatbot goriname={name} isViewLog={false} />
+              <CheckInButton meshCode={51324338} />
+            </div>
+
+            {buildMode() === BuildMode.Develop && (
+              <>
+                <h1>↓developのみ</h1>
+                <div>
+                  53393599(東京タワー)
+                  <CheckInButton meshCode={53393599} />
+                  53394611(東京駅)
+                  <CheckInButton meshCode={53394611} />
+                  52350349(大阪駅)
+                  <CheckInButton meshCode={52350349} />
+                  52350623(奈良)
+                  <CheckInButton meshCode={52350623} />
+                  63406310(長万部)
+                  <CheckInButton meshCode={63406310} />
+                  51324338(マツダ本社)
+                  <CheckInButton meshCode={51324338} />
+                  1(未登録)
+                  <CheckInButton meshCode={1} />
+                </div>
+              </>
+            )}
+          </>
         )}
         {/*         <p>staygoris.length:{staygoris.length}</p>
         <p>filteredStaygoris.length:{filteredStaygoris.length}</p> */}

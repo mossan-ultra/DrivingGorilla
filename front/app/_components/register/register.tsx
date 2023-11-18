@@ -128,7 +128,7 @@ export const Register = () => {
                     1,      //refuelingCount
                     343,   //distance
                     376,   //time
-                    [53393599]]
+                    []]
             );
         await driveContract?.txWithGelate(data, wallet.provider!, wallet.web3Auth!)
 

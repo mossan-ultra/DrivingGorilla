@@ -415,23 +415,25 @@ export const HoloEffectCard = (props) => {
   }
   const [time, setTime] = useState(0);
 
-  // useEffect(() => {
-  //   const id = setInterval(() => {
-  //     if (!controlRef.current) return;
-  //     setTime(time + 1);
-  //     const yAngle = controlRef.current.getAzimuthalAngle();
-  //     controlRef.current.setAzimuthalAngle(yAngle + 0.1);
-  //   }, 10);
-  //   return () => clearInterval(id);
-  // }, [time]);
+  useEffect(() => {
+    if (props.autorotate) {
+      const id = setInterval(() => {
+        if (!controlRef.current) return;
+        setTime(time + 1);
+        const yAngle = controlRef.current.getAzimuthalAngle();
+        controlRef.current.setAzimuthalAngle(yAngle + 0.2);
+      }, 10);
+      return () => clearInterval(id);
+    }
+  }, [time]);
 
   return (
     <>
-      <Canvas>
+      <Canvas style={props.style}>
         {props.enableOrbitContorls && (
           <OrbitControls onChange={onPositionChange} ref={controlRef} />
         )}
-        {isBack && <BackImage image={"/images/ken.png"} position={[0, 0, 0]} />}
+        {isBack && <BackImage image={"/images/back.jpeg"} position={[0, 0, 0]} />}
         {!isBack && <FrontImage image={props.image} position={[0, 0, 0]} />}
       </Canvas>
     </>
