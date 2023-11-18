@@ -38,6 +38,8 @@ export const Home = () => {
       );
     await tokenContract?.txWithGelate(initialData, wallet.provider!, wallet.web3Auth!)
 
+    // Footerだけをリロードさせたいが上手く動作できないため一旦全体をリロード
+    window.location.reload()
   }
 
   const makeBuddy = async () => {
@@ -52,6 +54,9 @@ export const Home = () => {
         ]
       );
     await dropContract?.txWithGelate(goriDropData, wallet.provider!, wallet.web3Auth!)
+
+    // Footerだけをリロードさせたいが上手く動作できないため一旦全体をリロード
+    window.location.reload()
 
     setStatus(Status.Initilize)
     const initialData =
@@ -113,13 +118,13 @@ export const Home = () => {
         return (
           <>
             {/* {相棒を殺す隠し機能} */}
-            {/* <div
+            <div
               className={styles.button}
               style={{
                 backgroundImage: `url(${bg.src})`,
               }}
               onClick={() => Delete()}
-            ></div > */}
+            ></div >
 
             <Profile /><Chatbot goriname={name} /></>
         )
