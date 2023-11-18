@@ -1,11 +1,11 @@
+import { WalletContext } from "../../../context/wallet";
 import { Equipment, useEquipments } from "../../../_hooks/useEquipments";
 import parentClasses from "../contents.module.css";
 import classes from "./equipments.module.css";
-import { useContext, useState } from "react";
+import {useContext,useState } from "react";
 import { HoloEffectCard } from "../holoEffectCard";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { WalletContext } from "@/app/context/wallet";
 
 export const Equipments = () => {
   const wallet = useContext(WalletContext);
@@ -17,50 +17,46 @@ export const Equipments = () => {
     open();
   }
 
-  const equipmentsComponent = equipments.map((equipment, i) => {
-    return (
-      <>
-        <div className={classes.li_item_container}>
-          <li
-            key={`img${i}`}
-            className={classes.li}
-            onClick={() =>
-              modalOpen({
-                name: equipment.name,
-                category: equipment.category,
-                description: equipment.description,
-                image: equipment.image,
-                driving: 0,
-                eco: 0,
-                distance: 0,
-                safe: 0,
-                refuling: 0,
-              })
-            }
-          >
-            <div style={{ position: "relative", width: 100, height: 100 }}>
-              <HoloEffectCard
-                image={equipment.image}
-                position={[i, i, 0]}
-                className={classes.canvas}
-                enableOrbitContorls={false}
-              ></HoloEffectCard>
-            </div>
-
-            <div className={classes.equipment_detail_container}>
-              <text>{equipment.name}</text>
-              <text>{equipment.category}</text>
-              <text>
-                STR:{equipment.driving},DEF:{equipment.safe}, LUK:
-                {equipment.eco}, AGI:{equipment.distance}, VIT:
-                {equipment.refuling}
-              </text>
-            </div>
-          </li>
+  const equipmentsComponent = equipments.map((equipment, i) => (
+    <div key={equipment.name + i} className={classes.li_item_container}>
+      <li
+        key={equipment.name}
+        className={classes.li}
+        onClick={() =>
+          modalOpen({
+            name: equipment.name,
+            category: equipment.category,
+            description: equipment.description,
+            image: equipment.image,
+            driving: 0,
+            eco: 0,
+            distance: 0,
+            safe: 0,
+            refuling: 0,
+          })
+        }
+      >
+        <div style={{ position: "relative", width: 100, height: 100 }}>
+          <HoloEffectCard
+            image={equipment.image}
+            position={[i, i, 0]}
+            className={classes.canvas}
+            enableOrbitContorls={false}
+          ></HoloEffectCard>
         </div>
-      </>
-    );
-  });
+
+        <div className={classes.equipment_detail_container}>
+          <p>{equipment.name}</p>
+          <p>{equipment.category}</p>
+          <p>
+            STR:{equipment.driving},DEF:{equipment.safe}, LUK:
+            {equipment.eco}, AGI:{equipment.distance}, VIT:
+            {equipment.refuling}
+          </p>
+        </div>
+      </li>
+    </div>
+  ));
 
   return (
     <div className={parentClasses.container}>
@@ -69,7 +65,7 @@ export const Equipments = () => {
           Equipments
         </h1>
         <div className={classes.list_container} data-swiper-parallax="-200">
-          {wallet.connected ? (
+          {wallet ? (
             isLoading ? (
               <div>Now loading...</div>
             ) : (
