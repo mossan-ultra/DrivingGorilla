@@ -70,6 +70,10 @@ export const Home = () => {
   }
 
   useEffect(() => {
+    reload();
+  }, [])
+
+  useEffect(() => {
     if (!isLoading && !isLoadingDropContract && !isLoadingTokenContract) {
       if (isHoldBuddy) {
         setStatus(Status.Normal);
