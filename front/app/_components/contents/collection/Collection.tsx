@@ -50,7 +50,7 @@ export const Collection = () => {
   const [modalMessage, setModalMessage] = useState(""); // モーダル内のメッセージを追加
   const headers = ["STR", "LUK", "AGI", "DEF", "VIT"];
   interface TableRowProps {
-    values: number[]; // 仮にnumber型としていますが、実際の型に合わせて変更してください
+    values: number[]; 
     isSelectRow?: boolean;
   }
   const TableRow: React.FC<TableRowProps> = ({
@@ -60,8 +60,6 @@ export const Collection = () => {
     <Table.Tr>
       {values.map((value, index) => (
         <Table.Td
-          //style={
-          //  isSelectRow ? { border: "1px solid #ddd" } : tableOkigoriCellStyle
           key={index}
         >
           {isSelectRow ? (
@@ -122,6 +120,15 @@ export const Collection = () => {
     }
   }, [isGoriTokenContractLoading, driveTokensIsLoading]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      initialize();
+    }
+  }, [isLoading]);
+
+
+
+
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -177,7 +184,8 @@ export const Collection = () => {
   }
 
   const filteredStaygoris = staygoris.filter((staygori) => {
-    return staygori.owner === wallet.address && String(staygori.location).length === 8;
+  //  return staygori.owner === wallet.address && String(staygori.location).length === 8;
+    return String(staygori.location).length === 8;
   });
 
   const onClickOkigoriButton = () => {

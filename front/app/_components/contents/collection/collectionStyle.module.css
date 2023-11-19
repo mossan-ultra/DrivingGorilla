@@ -8,14 +8,9 @@
     cursor: pointer;
     transition: background-color 0.3s ease; /* ホバー時のトランジション */
   }
-  .createButton {
-    /* ここにボタンのスタイルを追加 */
-    background-color: #3498db; /* 例として青色の背景色を追加 */
-    color: #ffffff; /* テキストの色を白色に設定 */
-    /* 他にも必要なスタイルを追加してください */
-  }
+
   
-  .createButton:hover {
+  .createOkigoriButton:hover {
     background-color: #333; /* ホバー時の背景色 */
   }
 
