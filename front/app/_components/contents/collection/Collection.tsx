@@ -15,7 +15,7 @@ import { useContract } from "@/app/_hooks/useContract";
 import { WalletContext } from "@/app/context/wallet";
 import TokenAbi from "../../../_abi/GoriToken.json";
 import { GelatoContract } from "@/app/gelato/gelatoContract";
-import styles from "../contents.module.css";
+import styles from "./collectionStyle.module.css";
 
 
 
@@ -62,7 +62,7 @@ export const Collection = () => {
         <Table.Td
           //style={
           //  isSelectRow ? { border: "1px solid #ddd" } : tableOkigoriCellStyle
-          //key={index}
+          key={index}
         >
           {isSelectRow ? (
             <select
@@ -286,7 +286,8 @@ export const Collection = () => {
             <div className="text-center">
               <button
                 onClick={onClickOkigoriButton}
-                disabled={isLoadingData} // ローディング中はボタンを無効化
+                //disabled={isLoadingData} // ローディング中はボタンを無効化
+                className={styles.createOkigoriButton}
               >
                 Generate Okigori here
               </button>
