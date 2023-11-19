@@ -1,9 +1,8 @@
 import parentClasses from "../contents.module.css";
-import { useBuddyGori } from "../../../_hooks/useBuddyGori";
 import { useStayGori } from "../../../_hooks/useStayGori";
 import React, { useContext, useEffect, useState } from "react";
 import GoriMap from "../../map/goriMap";
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import { Table } from "@mantine/core";
 import {
   GORITOKEN_CONTRACT_ADDRESS,
@@ -16,7 +15,7 @@ import { WalletContext } from "@/app/context/wallet";
 import TokenAbi from "../../../_abi/GoriToken.json";
 import { GelatoContract } from "@/app/gelato/gelatoContract";
 import styles from "./collectionStyle.module.css";
-
+import { BuddyGoriContext } from "../../../context/buddyGori";
 
 
 enum token {
@@ -36,7 +35,7 @@ export const Collection = () => {
     useDriveTokens(wallet.address as string);
   const [isLoadingModal, setIsLoadingModal] = useState(false); // モーダル内のローディングフラグを追加
   const [okiGoriPeriod, setOkiGoriPeriod] = useState(1); // 初期値を1に設定（短い期間）
-  const { name, imgUrl, isLoading } = useBuddyGori();
+  const { name, imgUrl, isLoading, isHoldBuddy, deleteBuddy, reload } = useContext(BuddyGoriContext);
   const { staygoris, isLoading: isStayGoriLoading } = useStayGori();
   const [currentLat, setCurrentLat] = useState<number | null>(null);
   const [currentLng, setCurrentLng] = useState<number | null>(null);
@@ -208,7 +207,7 @@ export const Collection = () => {
             currentLocation.latitude,
             currentLocation.longitude
           ).toString(),
-          imgUrl,
+          imgUrl as string,
           selectedValues,
           okiGoriPeriod
         );
@@ -307,29 +306,28 @@ export const Collection = () => {
                 <div className="text-center">
                   <p>Set Parameters for the Okigori</p>
                   {currentLat && currentLng ? (
-                    <>
-                      <Table className={styles.tableOkigoriStyle}>
-                        <Table.Tr>
-                          {headers.map((header, index) => (
-                            <Table.Th className={styles.tableOkigoriCellStyle} key={index}>
-                              {header}
-                            </Table.Th>
-                          ))}
-                        </Table.Tr>
-                        <Table.Tbody>
-                          <TableRow
-                            values={[time, eco, distance, safe, refuel]}
-                          />
-                          <TableRow values={selectedValues} isSelectRow />
-                        </Table.Tbody>
-                      </Table>
-                    </>
-                  ) : (
-                    <p>
-                      Unable to Generate Okigori as Location Information is
-                      Unavailable
-                    </p>
-                  )}
+  <>
+<Table className={styles.tableOkigoriStyle}>
+  <Table.Tbody>
+    <Table.Tr>
+      {headers.map((header, index) => (
+        <Table.Th className={styles.tableOkigoriCellStyle} key={index}>
+          {header}
+        </Table.Th>
+      ))}
+    </Table.Tr>
+    <TableRow values={[time, eco, distance, safe, refuel]} />
+    <TableRow values={selectedValues} isSelectRow />
+  </Table.Tbody>
+</Table>
+
+  </>
+) : (
+  <p>
+    Unable to Generate Okigori as Location Information is Unavailable
+  </p>
+)}
+
                   <br />
                   <p>
                     Period:  Short
@@ -369,7 +367,7 @@ export const Collection = () => {
           <GoriMap
             currentLat={currentLat}
             currentLng={currentLng}
-            myImageUrl={imgUrl}
+            myImageUrl={imgUrl as string}
             okigoriParams={filteredStaygoris}
             mode="GoriColle"
             showGoriDetail={true}

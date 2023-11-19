@@ -3,6 +3,7 @@ import { Map } from "./map";
 import { Marker } from "./marker";
 import { useRef, useState, useEffect, useContext } from "react";
 import React from "react";
+import { Button, Modal, TextInput, Title } from "@mantine/core";
 import { ethers } from "ethers";
 import { getContractWithSigner } from "../../_utils/contract";
 import isEqual from "lodash/isEqual";
@@ -27,10 +28,11 @@ export default function GoriMap(props: Props) {
   const [StayStatusArray, setStayStatusArray] = useState<number[]>([
     0, 0, 0, 0, 0,
   ]);
+  const [isModalOpen, setModalOpen] = useState(false);
   const wallet = useContext(WalletContext);
-
   const handleMarkerClick = (param: StayGori) => {
     setSelectedMarker(param);
+    setModalOpen(true);
   };
   const handleMyGoriClick = () => {
     //console.log("mygoriがクリックされました");
@@ -40,50 +42,12 @@ export default function GoriMap(props: Props) {
   const render = (status: Status) => {
     return <div>{status}</div>;
   };
+  function closeModal(){
+    setModalOpen(false)
+  }
 
   const AsyncGoriColleInfo = ({ tokenId }: { tokenId: number }) => {
     const { contract: tokenContract, isLoading: isContractLoading } = useContract(GORITOKEN_CONTRACT_ADDRESS, TokenAbi.abi);
-
-    useEffect(() => {
-      if (!isContractLoading) {
-
-        //console.log("Fetching GoriColle info...");
-        const fetchData = async () => {
-          try {
-            const result = await tokenContract!.getStayGoriDepositToken(wallet.address, tokenId);
-
-            // BigNumber オブジェクトから通常の数値に変換した tokenIds 配列
-            const tokenIdsArray = result[0].map((value: ethers.BigNumber) =>
-              value.toNumber()
-            );
-
-            // 新しいステータス配列を作成
-            const newStayStatusArray = ["1", "2", "3", "4", "5"].map(
-              (tokenId) => {
-                const amountIndex = tokenIdsArray.indexOf(Number(tokenId));
-                //console.log(tokenId, amountIndex);
-                return amountIndex !== -1
-                  ? Number(result[1][amountIndex] || 0)
-                  : 0;
-              }
-            );
-
-            //console.log("Setting StayStatusArray:", newStayStatusArray);
-
-            // 新しいステートをセット
-            // 現在のステートと新しいステートが同じでない場合のみセット
-            if (!isEqual(newStayStatusArray, StayStatusArray)) {
-              setStayStatusArray(newStayStatusArray);
-            }
-          } catch (error) {
-            console.error("Error fetching GoriColle info:", error);
-          }
-        };
-
-        fetchData();
-      }
-
-    }, [tokenId, isContractLoading]);
 
     return (
       <>
@@ -98,6 +62,8 @@ export default function GoriMap(props: Props) {
       </>
     );
   };
+
+
 
   return (
     <Wrapper
@@ -152,7 +118,18 @@ export default function GoriMap(props: Props) {
             <>
               <p>tokenId:{selectedMarker.tokenId.toString()}</p>
               <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
-            </>
+        {/* モーダルの描画 */}
+        {isModalOpen && (
+          <Modal
+            title="ここでOkigoriを生成"
+            onClose={closeModal}  // モーダルを閉じるために状態を更新
+            opened={isModalOpen}
+          >
+            {/* モーダルの中身がここに入ります */}
+          </Modal>
+
+        )}
+      </>
           )}
         </>
       )}
