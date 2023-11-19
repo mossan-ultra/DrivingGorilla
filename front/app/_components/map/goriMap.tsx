@@ -3,25 +3,39 @@ import { Map } from "./map";
 import { Marker } from "./marker";
 import { useRef, useState, useEffect, useContext } from "react";
 import React from "react";
+import { Container } from "@mantine/core";
 import { Button, Modal, TextInput, Title } from "@mantine/core";
-import { ethers } from "ethers";
-import { getContractWithSigner } from "../../_utils/contract";
-import isEqual from "lodash/isEqual";
+import GoriBattleStyle from "../contents/collection/collectionStyle.module.css"
 import { ChartOkigori } from "../contents/collection/chartOkigori";
+import ChartOkigoriModal from "../contents/collection/chartOkigoriModal";
 import { StayGori } from "../../_hooks/useStayGori";
 import TokenAbi from "../../_abi/GoriToken.json";
 import { GORITOKEN_CONTRACT_ADDRESS } from "@/app/_const/contracts";
 import { useContract } from "@/app/_hooks/useContract";
 import { WalletContext } from "@/app/context/wallet";
+import Image from "next/image";
+import { Chart } from "../contents/collection/chart";
+
 
 interface Props {
   currentLat: number;
   currentLng: number;
+  myGoriName: string;
   myImageUrl: string;
   okigoriParams: StayGori[]; // 置きゴリのリストを受け取る
   mode: string;
   showGoriDetail: boolean;
 }
+const OpponentGoriParam = {
+  name: "Pesos Gori",
+  imageURI:
+    "https://ipfs.io/ipfs/QmY6JMPQDjfNn29LxRBDAJUtoLQBFcnYQLU1dn4fYnDz1D/wonderful_gorilla_with_mazda_300.png",
+  Driving: 5,
+  Safe: 2,
+  Eco: 5,
+  Distance: 8,
+  Refuling: 4,
+};
 
 export default function GoriMap(props: Props) {
   const [selectedMarker, setSelectedMarker] = useState<StayGori | null>(null);
@@ -42,7 +56,7 @@ export default function GoriMap(props: Props) {
   const render = (status: Status) => {
     return <div>{status}</div>;
   };
-  function closeModal(){
+  function closeModal() {
     setModalOpen(false)
   }
 
@@ -118,18 +132,62 @@ export default function GoriMap(props: Props) {
             <>
               <p>tokenId:{selectedMarker.tokenId.toString()}</p>
               <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
-        {/* モーダルの描画 */}
-        {isModalOpen && (
-          <Modal
-            title="ここでOkigoriを生成"
-            onClose={closeModal}  // モーダルを閉じるために状態を更新
-            opened={isModalOpen}
-          >
-            {/* モーダルの中身がここに入ります */}
-          </Modal>
+              {isModalOpen && (
+                <Modal
+                  title="Gorilla Battle"
+                  onClose={closeModal}  // モーダルを閉じるために状態を更新
+                  opened={isModalOpen}
+                  className={GoriBattleStyle.modalStyle}
+                >
+                  <div>
+                    <Container className={GoriBattleStyle.container}>
+                      <div className={GoriBattleStyle.item}>
+                        <p>{props.myGoriName}</p>
+                        {props.myImageUrl && (
+                          <Image
+                            src={props.myImageUrl}
+                            alt="Gorilla Image"
+                            //layout="responsive"
+                            layout="fixed"
+                            width={100} // 幅を100pxに設定
+                            height={100} // 高さを100pxに設定
 
-        )}
-      </>
+                          />
+                        )}
+                        <Chart />
+                      </div>
+                      <div className={GoriBattleStyle.item}>
+                        <p>{OpponentGoriParam.name}</p>
+                        {OpponentGoriParam.imageURI && (
+                          <Image
+                            src={OpponentGoriParam.imageURI}
+                            alt="Gorilla Image"
+                            layout="fixed"
+                            //layout="responsive"
+                            width={100} // 幅を100pxに設定
+                            height={100} // 高さを100pxに設定
+                          />
+                        )}
+                        <ChartOkigoriModal
+                          Driving={OpponentGoriParam.Driving}
+                          Eco={OpponentGoriParam.Eco}
+                          Distance={OpponentGoriParam.Distance}
+                          Refuling={OpponentGoriParam.Refuling}
+                          Safe={OpponentGoriParam.Safe}
+                        />
+                      </div>
+                    </Container>
+                    <br/>
+                    <div className={GoriBattleStyle.buttonContainer}>
+                      <button className={GoriBattleStyle.battleButton}>
+                        Let{"'"}s Gorilla Battle!!
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
+
+              )}
+            </>
           )}
         </>
       )}

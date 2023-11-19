@@ -1,23 +1,126 @@
 
 .createOkigoriButton {
-    background-color: #555; /* グレーの背景色 */
-    color: #fff; /* 文字色 */
-    border: none;
-    padding: 5px 5px; /* ボタン内の余白 */
-    border-radius: 5px; /* 丸みを持たせる */
-    cursor: pointer;
-    transition: background-color 0.3s ease; /* ホバー時のトランジション */
-  }
+  background-color: #555; /* グレーの背景色 */
+  color: #fff; /* 文字色 */
+  border: none;
+  padding: 5px 5px; /* ボタン内の余白 */
+  border-radius: 5px; /* 丸みを持たせる */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* ホバー時のトランジション */
+}
 
-  
-  .createOkigoriButton:hover {
-    background-color: #333; /* ホバー時の背景色 */
-  }
+.createButton:hover {
+  background-color: #333; /* ホバー時の背景色 */
+}
 
-  .tableOkigoriCellStyle {
-    border: 1px solid #ddd; /* クォート不要 */
-  }
-  
-  .tableOkigoriStyle {
-    width: 100%; /* クォート不要 */
-  }
+.tableOkigoriCellStyle{
+  border: "1px solid #ddd",
+};
+.tableOkigoriStyle{
+  width: "100%",
+};
+
+.container {
+  height: 50%;
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+}
+
+.window {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  border: 1px solid white;
+  margin: 116px 0;
+  height: calc(100vh - 116px - 116px);
+  overflow: auto;
+}
+
+.title {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 24px;
+  border-bottom: 1px solid white;
+}
+
+.chartOuter {
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  align-items: center;
+  gap: 4px;
+  margin: 0 12px;
+}
+
+.paramTitle {
+  font-size: 4vw;
+  text-align: left;
+  background-color: rgba(138, 43, 226, 0.4);
+  padding: 4px;
+}
+
+.statusUl {
+  font-size: 3vw;
+  padding: 0 4px;
+}
+
+.statusList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(4px, 1fr));
+  gap: 4px;
+  border-bottom: 1px solid white;
+}
+
+.statusSubject {
+  font-weight: bold;
+}
+
+.statusValue {
+  text-align: right;
+}
+
+.container {
+  display: flex;
+}
+
+.item {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.buttonContainer {
+  text-align: center;
+}
+
+.battleButton {
+  background-color: #555; /* グレーの背景色 */
+  color: #fff; /* 文字色 */
+  border: none;
+  padding: 10px; /* ボタン内の余白 */
+  border-radius: 5px; /* 丸みを持たせる */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* ホバー時のトランジション */
+}
+
+.battleButton:hover {
+  background-color: #333; /* ホバー時の背景色 */
+}
+
+.statusColumn{
+  display: "flex" 
+}
+
+.modalStyle{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /*background-color: transparent; /* 背景色を透明に設定 */
+  background-image: url(/images/background2.png);
+  background-size: cover;
+  background-position: center;
+  z-index: 999; /* モーダルよりも奥に配置 */
+}

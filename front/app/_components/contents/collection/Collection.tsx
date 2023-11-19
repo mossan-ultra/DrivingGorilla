@@ -49,7 +49,7 @@ export const Collection = () => {
   const [modalMessage, setModalMessage] = useState(""); // モーダル内のメッセージを追加
   const headers = ["STR", "LUK", "AGI", "DEF", "VIT"];
   interface TableRowProps {
-    values: number[]; 
+    values: number[];
     isSelectRow?: boolean;
   }
   const TableRow: React.FC<TableRowProps> = ({
@@ -183,7 +183,7 @@ export const Collection = () => {
   }
 
   const filteredStaygoris = staygoris.filter((staygori) => {
-  //  return staygori.owner === wallet.address && String(staygori.location).length === 8;
+    //  return staygori.owner === wallet.address && String(staygori.location).length === 8;
     return String(staygori.location).length === 8;
   });
 
@@ -306,27 +306,27 @@ export const Collection = () => {
                 <div className="text-center">
                   <p>Set Parameters for the Okigori</p>
                   {currentLat && currentLng ? (
-  <>
-<Table className={styles.tableOkigoriStyle}>
-  <Table.Tbody>
-    <Table.Tr>
-      {headers.map((header, index) => (
-        <Table.Th className={styles.tableOkigoriCellStyle} key={index}>
-          {header}
-        </Table.Th>
-      ))}
-    </Table.Tr>
-    <TableRow values={[time, eco, distance, safe, refuel]} />
-    <TableRow values={selectedValues} isSelectRow />
-  </Table.Tbody>
-</Table>
+                    <>
+                      <Table className={styles.tableOkigoriStyle}>
+                        <Table.Tbody>
+                          <Table.Tr>
+                            {headers.map((header, index) => (
+                              <Table.Th className={styles.tableOkigoriCellStyle} key={index}>
+                                {header}
+                              </Table.Th>
+                            ))}
+                          </Table.Tr>
+                          <TableRow values={[time, eco, distance, safe, refuel]} />
+                          <TableRow values={selectedValues} isSelectRow />
+                        </Table.Tbody>
+                      </Table>
 
-  </>
-) : (
-  <p>
-    Unable to Generate Okigori as Location Information is Unavailable
-  </p>
-)}
+                    </>
+                  ) : (
+                    <p>
+                      Unable to Generate Okigori as Location Information is Unavailable
+                    </p>
+                  )}
 
                   <br />
                   <p>
@@ -367,6 +367,7 @@ export const Collection = () => {
           <GoriMap
             currentLat={currentLat}
             currentLng={currentLng}
+            myGoriName={name as string}
             myImageUrl={imgUrl as string}
             okigoriParams={filteredStaygoris}
             mode="GoriColle"
