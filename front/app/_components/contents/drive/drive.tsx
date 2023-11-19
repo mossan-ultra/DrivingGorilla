@@ -1,13 +1,12 @@
 import parentClasses from "../contents.module.css";
-import { useBuddyGori } from "../../../_hooks/useBuddyGori";
 import { useStayGori } from "../../../_hooks/useStayGori";
 import React, { useContext, useEffect, useState } from "react";
 import GoriMap from "../../map/goriMap";
 import Chatbot from "../../chatbot/Chatbot";
 import { WalletContext } from "@/app/context/wallet";
 import CheckInButton from "../../checkInButton";
-import { Button } from "@mantine/core";
 import { BuildMode, buildMode } from "@/app/_utils/buildMode";
+import { BuddyGoriContext } from "@/app/context/buddyGori";
 
 
 interface OkiGoriParam {
@@ -21,7 +20,7 @@ interface OkiGoriParam {
 //https://ipfs.io/ipfs/QmTt8EsiXAjyaLBjAbVEwMi2LZ8vyoTRM8FuCPhVQqc7xM/gorilla%20eating%20Takoyaki.png  変なゴリURL
 
 export const Drive = () => {
-  const { name, imgUrl, isLoading } = useBuddyGori();
+  const { name, imgUrl, isLoading, isHoldBuddy, deleteBuddy, reload } = useContext(BuddyGoriContext);
   const { staygoris, isLoading: isStayGoriLoading } = useStayGori();
   const [currentLat, setCurrentLat] = useState<number | null>(null);
   const [currentLng, setCurrentLng] = useState<number | null>(null);
@@ -73,7 +72,7 @@ export const Drive = () => {
           <GoriMap
             currentLat={currentLat}
             currentLng={currentLng}
-            myImageUrl={imgUrl}
+            myImageUrl={imgUrl as string}
             okigoriParams={filteredStaygoris}
             mode="GoriDrive"
             showGoriDetail={true}

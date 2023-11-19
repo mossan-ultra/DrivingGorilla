@@ -1,22 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { base64Decode } from "../_utils/common";
-import { getContract, getContractWithSigner } from "../_utils/contract";
-import { useContract } from "./useContract";
-import GoriTokenAbi from "../_abi/GoriToken.json";
-import { GORITOKEN_CONTRACT_ADDRESS } from "../_const/contracts";
+import { getContract } from "../_utils/contract";
 import { WalletContext } from "../context/wallet";
-
+import { BuddyGoriContext } from "../context/buddyGori";
 const BUDDY_GORI_TOKEN_ID = 0;
 
-export const useBuddyGori = () => {
+export const useBuddyGori = (): BuddyGoriContext => {
   // 財布接続状況
   const wallet = useContext(WalletContext);
-  const overrides = {
-    from: wallet.address,
-  };
-
-  // Metamaskをproviderとしたcontractを利用
-  // const { contract, isLoading: isContractLoading } = useContract(GORITOKEN_CONTRACT_ADDRESS, GoriTokenAbi.abi);
   const contract = getContract();
 
   const [name, setName] = useState("");
@@ -24,27 +15,38 @@ export const useBuddyGori = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isHoldBuddy, setIsHoldBuddy] = useState(false);
 
-  useEffect(() => {
-    if (wallet.connected) {
-      (async () => {
-        // Token0のデータを取得
-        const myGori64 = await contract!.myuri(wallet.address, BUDDY_GORI_TOKEN_ID);
-        const balance = await contract.balanceOf(wallet.address, BUDDY_GORI_TOKEN_ID);
-        setIsHoldBuddy(balance > 0);
+  const deleteBuddy = useCallback(() => {
+    setIsHoldBuddy(false)
+  }, []);
 
-        const json = await base64Decode(myGori64);
-        const myGori = JSON.parse(json);
-        setName(myGori.name);
-        setImgUrl(myGori.image);
-        setIsLoading(false);
-      })();
+
+  const reload = useCallback(() => {
+    if (!wallet.connected) {
+      return;
     }
-  }, [wallet]);
+    (async () => {
+      console.log(wallet)
+      // Token0のデータを取得
+      const myGori64 = await contract!.myuri(wallet.address, BUDDY_GORI_TOKEN_ID);
+      const balance = await contract!.balanceOf(wallet.address, BUDDY_GORI_TOKEN_ID);
+      setIsHoldBuddy(balance > 0);
+
+      const json = await base64Decode(myGori64);
+      const myGori = JSON.parse(json);
+      setName(myGori.name);
+      setImgUrl(myGori.image);
+      setIsLoading(false);
+    })();
+  }, [wallet.connected]);
+
+
 
   return {
     name,
     imgUrl,
     isHoldBuddy,
     isLoading,
+    deleteBuddy,
+    reload
   };
 };

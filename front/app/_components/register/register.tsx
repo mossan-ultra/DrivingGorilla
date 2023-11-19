@@ -9,10 +9,8 @@ import bg from "../../../public/images/register.jpeg";
 import styles from "./register.module.css";
 import { useContract } from "@/app/_hooks/useContract";
 import DriveContractAbi from "../../_abi/Drive.json";
-
-const targetAddress = "0x47A9064a8D242860ABb43FC8340B3680487CC088";
-import { useBuddyGori } from "@/app/_hooks/useBuddyGori";
 import { WalletContext } from "@/app/context/wallet";
+import { BuddyGoriContext } from "@/app/context/buddyGori";
 
 export const Register = () => {
     enum Status {
@@ -33,7 +31,7 @@ export const Register = () => {
     const wallet = useContext(WalletContext);
 
 
-    const { name, imgUrl, isLoading, isHoldBuddy } = useBuddyGori();
+    const { isLoading, isHoldBuddy } = useContext(BuddyGoriContext);
 
     const driveDemoData = [
         61,   //ecolevel
@@ -69,6 +67,7 @@ export const Register = () => {
 
         }
     }, [isContractLoading, isLoading])
+
 
 
     useEffect(() => {
