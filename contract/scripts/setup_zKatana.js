@@ -149,24 +149,26 @@ async function main() {
             location: 63406310,
             tokenId: 1005,
             equipment: {
-                name: "まんべくん",
+                name: "ホタテの盾",
                 category: 'weapon',
-                description: '最強のかに。暗黒大陸の住人。あと三回変身できる',
-                imageUri: 'https://ipfs.io/ipfs/bafybeihkihabqosgfr43f4txulhpjusnsphn4kf34gt3dneirrvsfadhym/manbekun-624x1024.png',
+                description: 'ホタテの盾。掃除されてないので臭い。かなりの性能を持つが社会的信頼は失う可能性がある',
+                imageUri: 'https://ipfs.io/ipfs/bafybeidfa25mnvifj2ometyyjtlouba4nji2dntss4pigstl4ymsjepzuq/_beb9774e-9e05-4a3d-8a5f-b8ede7ef1c0e.jpeg',
                 driving: ethers2wei('5'), eco: ethers2wei('5'), distance: ethers2wei('5'), safe: ethers2wei('5'), refuling: ethers2wei('5')
             },
+
         },
         {
             // 奈良
             location: 52350623,
             tokenId: 1006,
             equipment: {
-                name: "せんとくん",
+                name: " 鹿ソード",
                 category: 'weapon',
-                description: '装備すると仏感が増して後光がさす。しかし能力は低く後光以上の効果は期待できない',
-                imageUri: 'https://www.pref.nara.jp/secure/125341/piisu_thumb.png',
+                description: '装備すると鹿の王になれる。鹿キング、そう、君は鹿キング！',
+                imageUri: 'https://ipfs.io/ipfs/bafybeidrwhwyjarjk6qeycgffqmpqlmrbma26uc43wij75y7635e3hkc3u/_19e94a9d-abc2-4a36-bee5-7f2ee710b0ca.jpeg',
                 driving: ethers2wei('0.000001'), eco: ethers2wei('0.000001'), distance: ethers2wei('0.000001'), safe: ethers2wei('0.000001'), refuling: ethers2wei('0.000001')
             },
+
         },
         {
             // マツダミュージアム

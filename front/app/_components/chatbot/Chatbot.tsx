@@ -12,9 +12,10 @@ import { db } from '../../_models/db'
 import { useLiveQuery } from "dexie-react-hooks"
 
 type Props = {
-  goriname: string
+  goriname: string;
+  isViewLog: boolean;
 }
-const ChatBot: FC<Props> = ({ goriname }) => {
+const ChatBot: FC<Props> = ({ goriname, isViewLog }) => {
 
   const apiKey = OpenAI_API_Key as string
   const completeText = useCompleteText({ apiKey })
@@ -22,25 +23,25 @@ const ChatBot: FC<Props> = ({ goriname }) => {
   const [logs, setLogs] = useState<ChatLog[]>([
     addBotLog(goriname, Chatbot_StartMessage),
   ])
-  const [isLoading,setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false)
 
   const lists = useLiveQuery(
     async () => {
       return db.chatLists
         .toArray()
     },
-    );
+  );
   useEffect(() => {
-    if(lists && !isLoading){
-        lists.map((item, i) => {
-          const log = item as ChatLog;
-          setLogs((prev) => [...prev, log]);
-          if(log.chatname){
-            setMemory((prev) => `${prev}AI: ${log.chatlog}\n`) 
-          }else{
-            setMemory((prev) => `${prev}Human: ${log.chatlog}\n`)          
-          }
-          setLoading(true)
+    if (lists && !isLoading) {
+      lists.map((item, i) => {
+        const log = item as ChatLog;
+        setLogs((prev) => [...prev, log]);
+        if (log.chatname) {
+          setMemory((prev) => `${prev}AI: ${log.chatlog}\n`)
+        } else {
+          setMemory((prev) => `${prev}Human: ${log.chatlog}\n`)
+        }
+        setLoading(true)
       })
     }
   }, [lists]);
@@ -49,7 +50,7 @@ const ChatBot: FC<Props> = ({ goriname }) => {
     async (text: string) => {
       const sayChatbot = (message: string): void => {
         setLogs((prev) => [...prev, addBotLog(goriname, message)])
-        addBotDexie(goriname,message)
+        addBotDexie(goriname, message)
 
         const speechConfig = speechsdk.SpeechConfig.fromSubscription(SpeechSDK_Key as string, SpeechSDK_Region as string);
         speechConfig.speechRecognitionLanguage = SpeechSDK_Language;
@@ -118,34 +119,34 @@ const ChatBot: FC<Props> = ({ goriname }) => {
 
   }
 
-  async function addBotDexie(botname:string,chatlog: string){
-      await db.chatLists.add({
-        image: Chatbot_ImagePath,
-        chatname: botname,
-        chatlog,
-        chattime:new Date(),
-      })
+  async function addBotDexie(botname: string, chatlog: string) {
+    await db.chatLists.add({
+      image: Chatbot_ImagePath,
+      chatname: botname,
+      chatlog,
+      chattime: new Date(),
+    })
       .then((res) => {
-        console.log("addSelfDexie"+res.toString);
-        })
-    .catch(
-      (e)=>{
-        console.error(e);
+        console.log("addSelfDexie" + res.toString);
+      })
+      .catch(
+        (e) => {
+          console.error(e);
         });
   }
 
-  async function addSelfDexie(chatlog: string){
-      await db.chatLists.add({
-        image:undefined,
-        chatname:undefined,
-        chatlog,
-        chattime:new Date(),
-      })
+  async function addSelfDexie(chatlog: string) {
+    await db.chatLists.add({
+      image: undefined,
+      chatname: undefined,
+      chatlog,
+      chattime: new Date(),
+    })
       .then((res) => {
-          console.log("addSelfDexie"+res.toString);
-        })
+        console.log("addSelfDexie" + res.toString);
+      })
       .catch(
-        (e)=>{
+        (e) => {
           console.error(e);
         });
   }
@@ -160,14 +161,20 @@ const ChatBot: FC<Props> = ({ goriname }) => {
             await microphoneText();
           }
         } name="faMicrophone" className="border-0">
-          <FontAwesomeIcon icon={faMicrophone} fade size="3x" transform={"shrink-6"}></FontAwesomeIcon>
+          <FontAwesomeIcon icon={faMicrophone} fade size="4x" transform={"shrink-6"}></FontAwesomeIcon>
         </button>
-        <ChatInputText onSubmit={chatTextSubmit} />
+        {
+          isViewLog &&
+          <ChatInputText onSubmit={chatTextSubmit} />
+        }
       </div>
 
-      <div className="mt-6">
-        <ChatBotArea logs={logs} />
-      </div>
+      {
+        isViewLog &&
+        <div className="mt-6">
+          <ChatBotArea logs={logs} />
+        </div>
+      }
 
     </div>
   )
