@@ -50,8 +50,6 @@ export const Chart = () => {
       vitality: 0,
     }
   );
-
-  console.log(driveTokens)
   // チャート用のデータを準備
   const chartData = [
     {

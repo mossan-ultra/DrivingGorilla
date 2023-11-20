@@ -81,6 +81,10 @@
 
 .container {
   display: flex;
+  text-align: center;
+  background-color:gray;
+  background-clip: border-box;
+  margin:10px,10px,10px,10px;
 }
 
 .item {
@@ -112,15 +116,7 @@
   display: "flex" 
 }
 
-.modalStyle{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /*background-color: transparent; /* 背景色を透明に設定 */
-  background-image: url(/images/background2.png);
-  background-size: cover;
-  background-position: center;
-  z-index: 999; /* モーダルよりも奥に配置 */
+.opponentName {
+  font-size: 18px; /* 適切なサイズに調整 */
+  text-align: center;
 }

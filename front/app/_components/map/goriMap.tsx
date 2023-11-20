@@ -4,7 +4,7 @@ import { Marker } from "./marker";
 import { useRef, useState, useEffect, useContext } from "react";
 import React from "react";
 import { Container } from "@mantine/core";
-import { Button, Modal, TextInput, Title } from "@mantine/core";
+import { Button, Modal, TextInput, Title, ModalBaseStylesNames } from "@mantine/core";
 import GoriBattleStyle from "../contents/collection/collectionStyle.module.css"
 import { ChartOkigori } from "../contents/collection/chartOkigori";
 import ChartOkigoriModal from "../contents/collection/chartOkigoriModal";
@@ -134,12 +134,14 @@ export default function GoriMap(props: Props) {
               <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
               {isModalOpen && (
                 <Modal
-                  title="Gorilla Battle"
-                  onClose={closeModal}  // モーダルを閉じるために状態を更新
+                  onClose={closeModal}
                   opened={isModalOpen}
-                  className={GoriBattleStyle.modalStyle}
+                  centered={true}
+                  padding={0} 
+                  withCloseButton={false} 
                 >
-                  <div>
+                  <div style={{ backgroundColor: 'gray' }}>
+                    <p>Gorilla Battle</p>
                     <Container className={GoriBattleStyle.container}>
                       <div className={GoriBattleStyle.item}>
                         <p>{props.myGoriName}</p>
@@ -147,14 +149,12 @@ export default function GoriMap(props: Props) {
                           <Image
                             src={props.myImageUrl}
                             alt="Gorilla Image"
-                            //layout="responsive"
                             layout="fixed"
-                            width={100} // 幅を100pxに設定
-                            height={100} // 高さを100pxに設定
-
+                            width={100}
+                            height={100}
                           />
                         )}
-                        <Chart />
+                        <Chart/>
                       </div>
                       <div className={GoriBattleStyle.item}>
                         <p>{OpponentGoriParam.name}</p>
@@ -163,9 +163,8 @@ export default function GoriMap(props: Props) {
                             src={OpponentGoriParam.imageURI}
                             alt="Gorilla Image"
                             layout="fixed"
-                            //layout="responsive"
-                            width={100} // 幅を100pxに設定
-                            height={100} // 高さを100pxに設定
+                            width={100}
+                            height={100}
                           />
                         )}
                         <ChartOkigoriModal
@@ -177,15 +176,15 @@ export default function GoriMap(props: Props) {
                         />
                       </div>
                     </Container>
-                    <br/>
+                    <br />
                     <div className={GoriBattleStyle.buttonContainer}>
                       <button className={GoriBattleStyle.battleButton}>
                         Let{"'"}s Gorilla Battle!!
                       </button>
                     </div>
+                    <br/>
                   </div>
                 </Modal>
-
               )}
             </>
           )}
