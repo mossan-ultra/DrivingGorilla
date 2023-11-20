@@ -3,7 +3,3 @@
 package-lock.json
 **/.DS_Store
 **/node_modules
-contract/contracts/Drive.sol
-contract/contracts/GoriToken.sol
-contract/scripts/setup_zKatana.js
-.gitignore
