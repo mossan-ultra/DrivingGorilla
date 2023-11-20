@@ -65,7 +65,7 @@ export const Equipments = () => {
           Equipments
         </h1>
         <div className={classes.list_container} data-swiper-parallax="-200">
-          {wallet ? (
+          {wallet.connected ? (
             isLoading ? (
               <div>Now loading...</div>
             ) : (
