@@ -18,8 +18,8 @@ export const getContract = (): Contract => {
     return erc1155contract;
   }
   // RPC
-  const rpcUrl =
-    `https://rpc.startale.com/zkatana`;
+  const rpcUrl = 'https://rpc.zkatana.gelato.digital/'
+  // `https://rpc.startale.com/zkatana`;
 
   // Providerインスタンス作成
   const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
