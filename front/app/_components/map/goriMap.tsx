@@ -3,34 +3,50 @@ import { Map } from "./map";
 import { Marker } from "./marker";
 import { useRef, useState, useEffect, useContext } from "react";
 import React from "react";
-import { ethers } from "ethers";
-import { getContractWithSigner } from "../../_utils/contract";
-import isEqual from "lodash/isEqual";
+import { Container } from "@mantine/core";
+import { Button, Modal, TextInput, Title, ModalBaseStylesNames } from "@mantine/core";
+import GoriBattleStyle from "../contents/collection/collectionStyle.module.css"
 import { ChartOkigori } from "../contents/collection/chartOkigori";
+import ChartOkigoriModal from "../contents/collection/chartOkigoriModal";
 import { StayGori } from "../../_hooks/useStayGori";
 import TokenAbi from "../../_abi/GoriToken.json";
 import { GORITOKEN_CONTRACT_ADDRESS } from "@/app/_const/contracts";
 import { useContract } from "@/app/_hooks/useContract";
 import { WalletContext } from "@/app/context/wallet";
+import Image from "next/image";
+import { Chart } from "../contents/collection/chart";
+
 
 interface Props {
   currentLat: number;
   currentLng: number;
+  myGoriName: string;
   myImageUrl: string;
   okigoriParams: StayGori[]; // 置きゴリのリストを受け取る
   mode: string;
   showGoriDetail: boolean;
 }
+const OpponentGoriParam = {
+  name: "Pesos Gori",
+  imageURI:
+    "https://ipfs.io/ipfs/QmY6JMPQDjfNn29LxRBDAJUtoLQBFcnYQLU1dn4fYnDz1D/wonderful_gorilla_with_mazda_300.png",
+  Driving: 5,
+  Safe: 2,
+  Eco: 5,
+  Distance: 8,
+  Refuling: 4,
+};
 
 export default function GoriMap(props: Props) {
   const [selectedMarker, setSelectedMarker] = useState<StayGori | null>(null);
   const [StayStatusArray, setStayStatusArray] = useState<number[]>([
     0, 0, 0, 0, 0,
   ]);
+  const [isModalOpen, setModalOpen] = useState(false);
   const wallet = useContext(WalletContext);
-
   const handleMarkerClick = (param: StayGori) => {
     setSelectedMarker(param);
+    setModalOpen(true);
   };
   const handleMyGoriClick = () => {
     //console.log("mygoriがクリックされました");
@@ -40,50 +56,12 @@ export default function GoriMap(props: Props) {
   const render = (status: Status) => {
     return <div>{status}</div>;
   };
+  function closeModal() {
+    setModalOpen(false)
+  }
 
   const AsyncGoriColleInfo = ({ tokenId }: { tokenId: number }) => {
     const { contract: tokenContract, isLoading: isContractLoading } = useContract(GORITOKEN_CONTRACT_ADDRESS, TokenAbi.abi);
-
-    useEffect(() => {
-      if (!isContractLoading) {
-
-        //console.log("Fetching GoriColle info...");
-        const fetchData = async () => {
-          try {
-            const result = await tokenContract!.getStayGoriDepositToken(wallet.address, tokenId);
-
-            // BigNumber オブジェクトから通常の数値に変換した tokenIds 配列
-            const tokenIdsArray = result[0].map((value: ethers.BigNumber) =>
-              value.toNumber()
-            );
-
-            // 新しいステータス配列を作成
-            const newStayStatusArray = ["1", "2", "3", "4", "5"].map(
-              (tokenId) => {
-                const amountIndex = tokenIdsArray.indexOf(Number(tokenId));
-                //console.log(tokenId, amountIndex);
-                return amountIndex !== -1
-                  ? Number(result[1][amountIndex] || 0)
-                  : 0;
-              }
-            );
-
-            //console.log("Setting StayStatusArray:", newStayStatusArray);
-
-            // 新しいステートをセット
-            // 現在のステートと新しいステートが同じでない場合のみセット
-            if (!isEqual(newStayStatusArray, StayStatusArray)) {
-              setStayStatusArray(newStayStatusArray);
-            }
-          } catch (error) {
-            console.error("Error fetching GoriColle info:", error);
-          }
-        };
-
-        fetchData();
-      }
-
-    }, [tokenId, isContractLoading]);
 
     return (
       <>
@@ -98,6 +76,8 @@ export default function GoriMap(props: Props) {
       </>
     );
   };
+
+
 
   return (
     <Wrapper
@@ -152,6 +132,60 @@ export default function GoriMap(props: Props) {
             <>
               <p>tokenId:{selectedMarker.tokenId.toString()}</p>
               <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
+              {isModalOpen && (
+                <Modal
+                  onClose={closeModal}
+                  opened={isModalOpen}
+                  centered={true}
+                  padding={0}
+                  withCloseButton={false}
+                >
+                  <div className={GoriBattleStyle.modalStyle}>
+                    <div className={GoriBattleStyle.goriBattleTitle}>Gorilla Battle</div>
+                    <Container className={GoriBattleStyle.container}>
+                      <div className={GoriBattleStyle.item}>
+                        <p>{props.myGoriName}</p>
+                        {props.myImageUrl && (
+                          <Image
+                            src={props.myImageUrl}
+                            alt="Gorilla Image"
+                            layout="fixed"
+                            width={100}
+                            height={100}
+                          />
+                        )}
+                        <Chart />
+                      </div>
+                      <div className={GoriBattleStyle.item}>
+                        <p>{OpponentGoriParam.name}</p>
+                        {OpponentGoriParam.imageURI && (
+                          <Image
+                            src={OpponentGoriParam.imageURI}
+                            alt="Gorilla Image"
+                            layout="fixed"
+                            width={100}
+                            height={100}
+                          />
+                        )}
+                        <ChartOkigoriModal
+                          Driving={OpponentGoriParam.Driving}
+                          Eco={OpponentGoriParam.Eco}
+                          Distance={OpponentGoriParam.Distance}
+                          Refuling={OpponentGoriParam.Refuling}
+                          Safe={OpponentGoriParam.Safe}
+                        />
+                      </div>
+                    </Container>
+                    <br />
+                    <div className={GoriBattleStyle.buttonContainer}>
+                      <button className={GoriBattleStyle.battleButton}>
+                        Let{"'"}s Gorilla Battle!!
+                      </button>
+                    </div>
+                    <br />
+                  </div>
+                </Modal>
+              )}
             </>
           )}
         </>
@@ -183,3 +217,4 @@ function parseMeshCode(meshCode: number) {
   const lon = (((c * 10 + d) * 80 + f * 10 + h) * 45) / 3600 + 100;
   return { lat, lon };
 }
+
