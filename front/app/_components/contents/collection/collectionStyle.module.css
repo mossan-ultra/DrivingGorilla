@@ -116,7 +116,11 @@
   display: "flex" 
 }
 
-.opponentName {
+.goriBattleTitle {
   font-size: 18px; /* 適切なサイズに調整 */
   text-align: center;
+}
+
+.modalStyle{
+  background-color:gray;
 }

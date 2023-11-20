@@ -130,61 +130,15 @@ export default function GoriMap(props: Props) {
           )}
           {props.mode === "GoriColle" && (
             <>
-              <p>tokenId:{selectedMarker.tokenId.toString()}</p>
-              <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
+              {/* ... */}
               {isModalOpen && (
-                <Modal
-                  onClose={closeModal}
-                  opened={isModalOpen}
-                  centered={true}
-                  padding={0} 
-                  withCloseButton={false} 
-                >
-                  <div style={{ backgroundColor: 'gray' }}>
-                    <p>Gorilla Battle</p>
-                    <Container className={GoriBattleStyle.container}>
-                      <div className={GoriBattleStyle.item}>
-                        <p>{props.myGoriName}</p>
-                        {props.myImageUrl && (
-                          <Image
-                            src={props.myImageUrl}
-                            alt="Gorilla Image"
-                            layout="fixed"
-                            width={100}
-                            height={100}
-                          />
-                        )}
-                        <Chart/>
-                      </div>
-                      <div className={GoriBattleStyle.item}>
-                        <p>{OpponentGoriParam.name}</p>
-                        {OpponentGoriParam.imageURI && (
-                          <Image
-                            src={OpponentGoriParam.imageURI}
-                            alt="Gorilla Image"
-                            layout="fixed"
-                            width={100}
-                            height={100}
-                          />
-                        )}
-                        <ChartOkigoriModal
-                          Driving={OpponentGoriParam.Driving}
-                          Eco={OpponentGoriParam.Eco}
-                          Distance={OpponentGoriParam.Distance}
-                          Refuling={OpponentGoriParam.Refuling}
-                          Safe={OpponentGoriParam.Safe}
-                        />
-                      </div>
-                    </Container>
-                    <br />
-                    <div className={GoriBattleStyle.buttonContainer}>
-                      <button className={GoriBattleStyle.battleButton}>
-                        Let{"'"}s Gorilla Battle!!
-                      </button>
-                    </div>
-                    <br/>
-                  </div>
-                </Modal>
+                <GoriBattleModal
+                  myGoriName={props.myGoriName}
+                  myImageUrl={props.myImageUrl}
+                  opponentGoriParam={OpponentGoriParam}
+                  isModalOpen={isModalOpen}
+                  closeModal={closeModal}
+                />
               )}
             </>
           )}
@@ -216,4 +170,39 @@ function parseMeshCode(meshCode: number) {
   const lat = (((a * 10 + b) * 80 + e * 10 + g) * 30) / 3600;
   const lon = (((c * 10 + d) * 80 + f * 10 + h) * 45) / 3600 + 100;
   return { lat, lon };
+}
+
+
+
+function GoriBattleModal({ myGoriName, myImageUrl, opponentGoriParam, isModalOpen, closeModal }: any) {
+  return (
+    <Modal onClose={closeModal} opened={isModalOpen} centered={true} padding={0} withCloseButton={false}>
+      <div className={GoriBattleStyle.modalStyle}>
+        <div className={GoriBattleStyle.goriBattleTitle}>Gorilla Battle</div>
+        <Container className={GoriBattleStyle.container}>
+          <GoriBattleItem name={myGoriName} imageUrl={myImageUrl} />
+          <GoriBattleItem
+            name={opponentGoriParam.name}
+            imageUrl={opponentGoriParam.imageURI}
+            chartComponent={<ChartOkigoriModal {...opponentGoriParam} />}
+          />
+        </Container>
+        <br />
+        <div className={GoriBattleStyle.buttonContainer}>
+          <button className={GoriBattleStyle.battleButton}>Let's Gorilla Battle!!</button>
+        </div>
+        <br />
+      </div>
+    </Modal>
+  );
+}
+
+function GoriBattleItem({ name, imageUrl, chartComponent }: any) {
+  return (
+    <div className={GoriBattleStyle.item}>
+      <p>{name}</p>
+      {imageUrl && <Image src={imageUrl} alt="Gorilla Image" layout="fixed" width={100} height={100} />}
+      {chartComponent}
+    </div>
+  );
 }
