@@ -10,6 +10,7 @@ import { useContract } from "@/app/_hooks/useContract";
 import TokenContractAbi from "../../../_abi/GoriToken.json";
 import { BiSolidTrash } from "react-icons/bi";
 import { GORITOKEN_CONTRACT_ADDRESS } from "@/app/_const/contracts";
+import { BuildMode, buildMode } from "@/app/_utils/buildMode";
 
 export const Equipments = () => {
   const wallet = useContext(WalletContext);
@@ -110,9 +111,13 @@ export const Equipments = () => {
                     enableOrbitContorls={true}
                   ></HoloEffectCard>
                   {selectEquipment?.description}
-                  <Button justify="center" fullWidth leftSection={<BiSolidTrash size={14} />} variant="default" onClick={() => burn(selectEquipment!)} loading={isDeleteProcessing}>
-                    delete
-                  </Button>
+                  {
+                    buildMode() === BuildMode.Develop &&
+                    <Button justify="center" fullWidth leftSection={<BiSolidTrash size={14} />} variant="default" onClick={() => burn(selectEquipment!)} loading={isDeleteProcessing}>
+                      delete
+                    </Button>
+
+                  }
                 </Modal>
               </>
             )
