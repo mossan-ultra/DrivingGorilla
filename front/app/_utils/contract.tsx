@@ -2,24 +2,22 @@
 
 import { Contract, ethers } from "ethers";
 import GoriToken from "../_abi/GoriToken.json";
-import DriveContractAbi from "../_abi/Drive.json";
 import { DRIVE_CONTRACT_ADDRESS, GORITOKEN_CONTRACT_ADDRESS } from "../_const/contracts";
 
 // ゴリラアドレス
 const contractAddress = GORITOKEN_CONTRACT_ADDRESS;
-
-const driveContractAddress = DRIVE_CONTRACT_ADDRESS;
-
 let erc1155contract: ethers.Contract | null = null;
-let driveContract: ethers.Contract | null = null;
 
 export const getContract = (): Contract => {
   if (erc1155contract) {
     return erc1155contract;
   }
   // RPC
-  const rpcUrl = 'https://rpc.zkatana.gelato.digital/'
-  // `https://rpc.startale.com/zkatana`;
+  const rpcUrl =
+    process.env.NEXT_PUBLIC_STARTALE_CLIENT_ID ?
+      `https://rpc.startale.com/zkatana?apiKey=${process.env.NEXT_PUBLIC_STARTALE_CLIENT_ID}` :
+      `https://rpc.startale.com/zkatana`
+
 
   // Providerインスタンス作成
   const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
@@ -31,28 +29,6 @@ export const getContract = (): Contract => {
     provider
   );
   erc1155contract = contract;
-
-  return contract;
-};
-
-export const getDriveContract = () => {
-  if (driveContract) {
-    return driveContract;
-  }
-  // RPC
-  const rpcUrl =
-    `https://avalanche-fuji.infura.io/v3/${process.env.NEXT_PUBLIC_INFULA_CLIENT_ID}`;
-
-  // Providerインスタンス作成
-  const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-
-  // Contractインスタンス作成
-  const contract: Contract = new ethers.Contract(
-    driveContractAddress,
-    DriveContractAbi.abi,
-    provider
-  );
-  driveContract = contract;
 
   return contract;
 };
