@@ -31,7 +31,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#a8a6a3" />
         <ColorSchemeScript />
       </head>
-      <body className={`${inter.className} ${orbitron.className}`}>
+      <body className={`${inter.className} ${orbitron.className}`} style={{ overflow: "hidden" }}>
         <MantineProvider>{children}</MantineProvider>
       </body>
     </html>
