@@ -162,6 +162,24 @@ NEXT_PUBLIC_TEXT_ANALYSIS_KEY={Azure AI TextAnalysisキー}
 NEXT_PUBLIC_TEXT_ANALYSIS_ENDPOINT={Azure AI TextAnalysisエンドポイント}
 ```
 
+### Gelatoを設定します
+https://beta.app.gelato.network/relay へ行き、API Keyを作成します。
+本プロダクトでは1Blanceによりガス代を支払いますのでデポジットしておいてください。
+
+参考：https://github.com/gelatodigital/astar-zkatana-starter-kit
+
+```
+NEXT_PUBLIC_GELATO_RELAY_API_KEY={Gelato API Key}
+```
+
+### web3Authを設定します
+https://web3auth.io/ へ行き、プロジェクトを作成します。
+作成後、プロジェクトの設定画面からClientIdをコピーし、envへ貼り付けます。
+```
+NEXT_PUBLIC_WEB3AUTH_CLIENT_ID={web3Auth API Key}
+```
+
+
 ## Quickstart
 
 Githubより[本アプリのgitリポジトリ](https://github.com/mossan-ultra/DrivingGorilla)をcloneします
