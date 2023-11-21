@@ -2,16 +2,41 @@ import { WalletContext } from "../../../context/wallet";
 import { Equipment, useEquipments } from "../../../_hooks/useEquipments";
 import parentClasses from "../contents.module.css";
 import classes from "./equipments.module.css";
-import {useContext,useState } from "react";
+import { useContext, useState } from "react";
 import { HoloEffectCard } from "../holoEffectCard";
-import { Modal } from "@mantine/core";
+import { Button, Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { useContract } from "@/app/_hooks/useContract";
+import TokenContractAbi from "../../../_abi/GoriToken.json";
+import { BiSolidTrash } from "react-icons/bi";
+import { GORITOKEN_CONTRACT_ADDRESS } from "@/app/_const/contracts";
+import { BuildMode, buildMode } from "@/app/_utils/buildMode";
 
 export const Equipments = () => {
   const wallet = useContext(WalletContext);
   const { equipments, isLoading } = useEquipments(wallet.address as string);
   const [opened, { open, close }] = useDisclosure(false);
   const [selectEquipment, setSelectEquipment] = useState<Equipment>();
+  const { contract: tokenContract, isLoading: isContractLoading } = useContract(GORITOKEN_CONTRACT_ADDRESS, TokenContractAbi.abi);
+  const [isDeleteProcessing, setIsDeleteProcessing] = useState(false);
+
+  async function burn(eqipment: Equipment) {
+    setIsDeleteProcessing(true);
+
+    const burnTx =
+      await tokenContract!.interface.encodeFunctionData("burn",
+        [
+          wallet.address,
+          eqipment.tokenId,
+          1,
+        ]
+      );
+    await tokenContract?.txWithGelate(burnTx, wallet.provider!, wallet.web3Auth!);
+
+    setIsDeleteProcessing(false);
+    close();
+
+  }
   function modalOpen(eqipment: Equipment) {
     setSelectEquipment(eqipment);
     open();
@@ -33,6 +58,7 @@ export const Equipments = () => {
             distance: 0,
             safe: 0,
             refuling: 0,
+            tokenId: equipment.tokenId
           })
         }
       >
@@ -85,6 +111,13 @@ export const Equipments = () => {
                     enableOrbitContorls={true}
                   ></HoloEffectCard>
                   {selectEquipment?.description}
+                  {
+                    buildMode() === BuildMode.Develop &&
+                    <Button justify="center" fullWidth leftSection={<BiSolidTrash size={14} />} variant="default" onClick={() => burn(selectEquipment!)} loading={isDeleteProcessing}>
+                      delete
+                    </Button>
+
+                  }
                 </Modal>
               </>
             )

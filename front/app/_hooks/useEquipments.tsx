@@ -17,6 +17,7 @@ export type Equipment = {
   distance: number;
   safe: number;
   refuling: number;
+  tokenId: number;
 };
 type EqupmentMeta = {
   tokenId: string;
@@ -53,42 +54,44 @@ export const useEquipments = (walletAddress: string) => {
         const recv = await contract.queryFilter(
           contract.filters.EquipmentMinted(wallet.address, null)
         );
-        const tempEquipments = [];
+        const tempEquipments: Equipment[] = [];
 
-        // ログからwalletが持ち主の装備を取得
-        for (const log of recv) {
-          // Eventのargsがない場合はスキップ
-          if (!log.args) continue;
+        const _tokenIdList = recv.map(log => {
+          return log.args![1].toString();
+        })
+        const tokenIdList = [...new Set(_tokenIdList)];
+        const walletAddressList = new Array<string>(tokenIdList.length).fill(wallet.address as string);
+        const balanceOf = await contract.balanceOfBatch(
+          walletAddressList,
+          tokenIdList
+        );
+        await tokenIdList.reduce((promise, tokenId, index) => {
+          return promise.then(async () => {
+            let json;
+            const meta = metaMap.find(meta => meta.tokenId.toString() === tokenId.toString());
+            if (meta) {
+              json = meta.jsonString;
+            } else {
+              const equipment64 = await contract.myuri(walletAddress, tokenId);
+              json = await base64Decode(equipment64);
+              metaMap.push({ tokenId: tokenId, jsonString: json })
+            }
+            let e: Equipment = JSON.parse(json, equipmentReviver);
+            e.driving = Number(ethers.utils.formatEther(e.driving.toString()));
+            e.eco = Number(ethers.utils.formatEther(e.eco.toString()));
+            e.distance = Number(ethers.utils.formatEther(e.distance.toString()));
+            e.refuling = Number(ethers.utils.formatEther(e.refuling.toString()));
+            e.safe = Number(ethers.utils.formatEther(e.safe.toString()));
+            e.tokenId = tokenId;
+            for (let i = 0; i < balanceOf[index]; i++) {
+              tempEquipments.push(e);
+            }
+          });
+        }, Promise.resolve());
 
-          // argsを分割代入
-          const [owner, tokenId] = log.args;
-
-          // 装備の持ち主が財布の持ち主と違う場合はスキップ
-          if (owner !== walletAddress) continue;
-
-          // 装備IDを元に装備詳細を取得
-          let json;
-          const meta = metaMap.find(meta => meta.tokenId.toString() === tokenId.toString());
-          if (meta) {
-            json = meta.jsonString;
-
-          } else {
-            const equipment64 = await contract.myuri(walletAddress, tokenId);
-            json = await base64Decode(equipment64);
-            metaMap.push({ tokenId: tokenId, jsonString: json })
-
-          }
-          let e: Equipment = JSON.parse(json, equipmentReviver);
-          e.driving = Number(ethers.utils.formatEther(e.driving.toString()));
-          e.eco = Number(ethers.utils.formatEther(e.eco.toString()));
-          e.distance = Number(ethers.utils.formatEther(e.distance.toString()));
-          e.refuling = Number(ethers.utils.formatEther(e.refuling.toString()));
-          e.safe = Number(ethers.utils.formatEther(e.safe.toString()));
-
-          tempEquipments.push(e);
-        }
         setEquipments(tempEquipments);
         setIsLoading(false);
+
       })();
     }
   }, [wallet]);

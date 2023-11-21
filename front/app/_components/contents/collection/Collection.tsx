@@ -14,15 +14,9 @@ import { useContract } from "@/app/_hooks/useContract";
 import { WalletContext } from "@/app/context/wallet";
 import TokenAbi from "../../../_abi/GoriToken.json";
 import { GelatoContract } from "@/app/gelato/gelatoContract";
-import { BuddyGoriContext } from "@/app/context/buddyGori";
+import styles from "./collectionStyle.module.css";
+import { BuddyGoriContext } from "../../../context/buddyGori";
 
-const tableOkigoriCellStyle = {
-  border: "1px solid #ddd",
-};
-const tableOkigoriStyle: React.CSSProperties = {
-  borderCollapse: "collapse",
-  width: "100%",
-};
 
 enum token {
   Driving,
@@ -55,7 +49,7 @@ export const Collection = () => {
   const [modalMessage, setModalMessage] = useState(""); // モーダル内のメッセージを追加
   const headers = ["STR", "LUK", "AGI", "DEF", "VIT"];
   interface TableRowProps {
-    values: number[]; // 仮にnumber型としていますが、実際の型に合わせて変更してください
+    values: number[];
     isSelectRow?: boolean;
   }
   const TableRow: React.FC<TableRowProps> = ({
@@ -65,9 +59,6 @@ export const Collection = () => {
     <Table.Tr>
       {values.map((value, index) => (
         <Table.Td
-          style={
-            isSelectRow ? { border: "1px solid #ddd" } : tableOkigoriCellStyle
-          }
           key={index}
         >
           {isSelectRow ? (
@@ -128,6 +119,14 @@ export const Collection = () => {
     }
   }, [isGoriTokenContractLoading, driveTokensIsLoading]);
 
+  useEffect(() => {
+    if (!isLoading) {
+      initialize();
+    }
+  }, [isLoading]);
+
+
+
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
@@ -184,7 +183,8 @@ export const Collection = () => {
   }
 
   const filteredStaygoris = staygoris.filter((staygori) => {
-    return staygori.owner === wallet.address && String(staygori.location).length === 8;
+    //  return staygori.owner === wallet.address && String(staygori.location).length === 8;
+    return String(staygori.location).length === 8;
   });
 
   const onClickOkigoriButton = () => {
@@ -293,7 +293,8 @@ export const Collection = () => {
             <div className="text-center">
               <button
                 onClick={onClickOkigoriButton}
-                disabled={isLoadingData} // ローディング中はボタンを無効化
+                //disabled={isLoadingData} // ローディング中はボタンを無効化
+                className={styles.createOkigoriButton}
               >
                 Generate Okigori here
               </button>
@@ -306,28 +307,27 @@ export const Collection = () => {
                   <p>Set Parameters for the Okigori</p>
                   {currentLat && currentLng ? (
                     <>
-                      <Table style={tableOkigoriStyle}>
-                        <Table.Tr>
-                          {headers.map((header, index) => (
-                            <Table.Th style={tableOkigoriCellStyle} key={index}>
-                              {header}
-                            </Table.Th>
-                          ))}
-                        </Table.Tr>
+                      <Table className={styles.tableOkigoriStyle}>
                         <Table.Tbody>
-                          <TableRow
-                            values={[time, eco, distance, safe, refuel]}
-                          />
+                          <Table.Tr>
+                            {headers.map((header, index) => (
+                              <Table.Th className={styles.tableOkigoriCellStyle} key={index}>
+                                {header}
+                              </Table.Th>
+                            ))}
+                          </Table.Tr>
+                          <TableRow values={[time, eco, distance, safe, refuel]} />
                           <TableRow values={selectedValues} isSelectRow />
                         </Table.Tbody>
                       </Table>
+
                     </>
                   ) : (
                     <p>
-                      Unable to Generate Okigori as Location Information is
-                      Unavailable
+                      Unable to Generate Okigori as Location Information is Unavailable
                     </p>
                   )}
+
                   <br />
                   <p>
                     Period:  Short
@@ -367,6 +367,7 @@ export const Collection = () => {
           <GoriMap
             currentLat={currentLat}
             currentLng={currentLng}
+            myGoriName={name as string}
             myImageUrl={imgUrl as string}
             okigoriParams={filteredStaygoris}
             mode="GoriColle"

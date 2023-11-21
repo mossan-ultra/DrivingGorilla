@@ -47,11 +47,9 @@ export default function CheckInButton(props: Props) {
         const event = (await tokenContract!.queryFilter(filter)).pop(); // Gets the latest event matching the filter
         let rtn: EquimpmentMintInfo;
         if (event?.blockNumber === blockNumber) {
-            console.log(event)
 
 
             const [owner, tokenId] = event.args as ethers.utils.Result;
-            console.log(`tokenId2=${tokenId}`)
 
             const equipment64 = await tokenContract.myuri(wallet.address, tokenId.toString());
             const json = await base64Decode(equipment64);
@@ -82,7 +80,6 @@ export default function CheckInButton(props: Props) {
         const mintInfo = await checkEquipmentMinted(Number(detaile.blockNumber));
 
         equipmentModalOpen();
-        console.log(mintInfo)
     }
     return (<>
         <div className={styles.container}>
