@@ -18,6 +18,8 @@ const orbitron = Orbitron({
   subsets: ["latin"],
 });
 
+const bodyStyle = { overflow: "hidden" };
+
 export default function RootLayout({
   children,
 }: {
@@ -31,7 +33,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#a8a6a3" />
         <ColorSchemeScript />
       </head>
-      <body className={`${inter.className} ${orbitron.className}`} style={{ overflow: "hidden" }}>
+      <body className={`${inter.className} ${orbitron.className}`} style={bodyStyle}>
         <MantineProvider>{children}</MantineProvider>
       </body>
     </html>
