@@ -14,7 +14,6 @@ interface Props {
 }
 
 export const OkigoResult = ({ stayGori }: Props) => {
-    useEffect(() => { console.log(stayGori) }, [])
     const wallet = useContext(WalletContext);
     const { amounts: driveTokens, isLoading: driveTokensIsLoading } =
         useDriveTokens(wallet.address as string);

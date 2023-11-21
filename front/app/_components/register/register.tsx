@@ -33,6 +33,7 @@ export const Register = () => {
     const refFirstRef = useRef(true);
     const wallet = useContext(WalletContext);
     const { staygoris, isLoading: isStayGoriLoading } = useStayGori();
+    const [dialogTitle, setDialogTitle] = useState('');
 
 
     const { isLoading, isHoldBuddy } = useContext(BuddyGoriContext);
@@ -82,6 +83,8 @@ export const Register = () => {
                 return;
             }
         }
+
+        setDialogTitle('Driving data registration')
 
         const contract = getContract();
         const filter = contract.filters.TransferSingle(null, null, wallet.address, null, null)
@@ -193,7 +196,14 @@ export const Register = () => {
                         </Table>
                         {
                             staygoris.length > 0 &&
-                            <Button color="violet" onClick={() => setStatus(Status.OkigoResult)} fullWidth rightSection={<BiChevronsRight size={14} />}
+                            <Button color="violet" onClick={() => {
+                                setStatus(Status.OkigoResult);
+                                setDialogTitle('OKIGORI')
+                            }
+                            }
+                                fullWidth rightSection={<BiChevronsRight size={14} />
+
+                                }
                             >OKIGORI is completed</Button>
                         }
                     </>
@@ -214,7 +224,7 @@ export const Register = () => {
         <Modal
             opened={opened}
             onClose={close}
-            title={"Driving data registration"}
+            title={dialogTitle}
             style={{ height: "1000px" }}
         >
             <div>
