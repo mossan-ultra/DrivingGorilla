@@ -1,6 +1,6 @@
 import { DRIVE_CONTRACT_ADDRESS } from "@/app/_const/contracts";
 import { getContract } from "@/app/_utils/contract";
-import { Modal, Table, Title } from "@mantine/core"
+import { Button, Modal, Table, Title } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import { useContext, useEffect, useRef, useState } from "react";
 import { ethers } from "ethers";
@@ -11,10 +11,14 @@ import { useContract } from "@/app/_hooks/useContract";
 import DriveContractAbi from "../../_abi/Drive.json";
 import { WalletContext } from "@/app/context/wallet";
 import { BuddyGoriContext } from "@/app/context/buddyGori";
+import { OkigoResultList } from "./okigoResultList";
+import Swiper from "swiper";
+import { useStayGori } from "@/app/_hooks/useStayGori";
+import { BiChevronsRight } from "react-icons/bi";
 
 export const Register = () => {
     enum Status {
-        IDLE, TrasactionCall, Check, Finish
+        IDLE, TrasactionCall, Check, Finish, OkigoResult
     }
     type TokenAmount = {
         id: string;
@@ -25,10 +29,11 @@ export const Register = () => {
     const [opened, { open, close }] = useDisclosure(false);
     const [status, setStatus] = useState(Status.IDLE);
     const { contract: driveContract, isLoading: isContractLoading } = useContract(DRIVE_CONTRACT_ADDRESS, DriveContractAbi.abi);
-    const [blockNumber, setBlockNumber] = useState();
     const [mintAmount, setMintAmount] = useState<TokenAmount[]>([]);
     const refFirstRef = useRef(true);
     const wallet = useContext(WalletContext);
+    const { staygoris, isLoading: isStayGoriLoading } = useStayGori();
+    const [dialogTitle, setDialogTitle] = useState('');
 
 
     const { isLoading, isHoldBuddy } = useContext(BuddyGoriContext);
@@ -78,6 +83,8 @@ export const Register = () => {
                 return;
             }
         }
+
+        setDialogTitle('Driving data registration')
 
         const contract = getContract();
         const filter = contract.filters.TransferSingle(null, null, wallet.address, null, null)
@@ -181,15 +188,35 @@ export const Register = () => {
                     </>
                 )
             case Status.Finish:
-            default:
                 return (
                     <>
                         <Title order={3}>{'The following tokens were minted!!'}</Title>
                         <Table>
                             <Table.Tbody>{mintTokenRows(mintAmount.filter(element => Number(element.id) <= 5).sort((a, b) => Number(a.id) - Number(b.id)))}</Table.Tbody>
                         </Table>
+                        {
+                            staygoris.length > 0 &&
+                            <Button color="violet" onClick={() => {
+                                setStatus(Status.OkigoResult);
+                                setDialogTitle('OKIGORI')
+                            }
+                            }
+                                fullWidth rightSection={<BiChevronsRight size={14} />
+
+                                }
+                            >OKIGORI is completed</Button>
+                        }
                     </>
                 )
+            case Status.OkigoResult:
+            default:
+                return (
+                    <>
+                        <OkigoResultList staygoriList={staygoris}></OkigoResultList>
+                    </>
+                )
+
+
         }
     }
 
@@ -197,7 +224,7 @@ export const Register = () => {
         <Modal
             opened={opened}
             onClose={close}
-            title={"Driving data registration"}
+            title={dialogTitle}
             style={{ height: "1000px" }}
         >
             <div>
