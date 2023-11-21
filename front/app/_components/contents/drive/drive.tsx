@@ -75,8 +75,7 @@ export const Drive = () => {
             myImageUrl={imgUrl as string}
             okigoriParams={filteredStaygoris}
             mode="GoriDrive"
-            showGoriDetail={true}
-          />
+            showGoriDetail={true} myGoriName={name!} />
         ) : (
           <p>Now GoriMap Loading...</p>
         )}
