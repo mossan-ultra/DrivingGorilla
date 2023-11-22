@@ -74,6 +74,9 @@ node script/setup_zKatana.js
 ##  相棒入手
 ![Positive Gorilla](/contract/doc/goridrop.png) 
 
+##  相棒初期化
+![Positive Gorilla](/contract/doc/initgori.png) 
+
 ##  運転データ登録
 ![Positive Gorilla](/contract/doc/checkin.png) 
 
