@@ -3,6 +3,8 @@ import { Map } from "./map";
 import { Marker } from "./marker";
 import { useRef, useState, useEffect, useContext } from "react";
 import React from "react";
+import isEqual from "lodash/isEqual";
+import { ethers } from "ethers";
 import { Container } from "@mantine/core";
 import { Button, Modal, TextInput, Title, ModalBaseStylesNames } from "@mantine/core";
 import GoriBattleStyle from "../contents/collection/collectionStyle.module.css"
@@ -49,7 +51,6 @@ export default function GoriMap(props: Props) {
     setModalOpen(true);
   };
   const handleMyGoriClick = () => {
-    //console.log("mygoriがクリックされました");
     setSelectedMarker(null); // 選択中のマーカーを解除
   };
   const ref = useRef<HTMLDivElement>(null);
@@ -62,6 +63,43 @@ export default function GoriMap(props: Props) {
 
   const AsyncGoriColleInfo = ({ tokenId }: { tokenId: number }) => {
     const { contract: tokenContract, isLoading: isContractLoading } = useContract(GORITOKEN_CONTRACT_ADDRESS, TokenAbi.abi);
+    useEffect(() => {
+      if (!isContractLoading) {
+
+        //console.log("Fetching GoriColle info...");
+        const fetchData = async () => {
+          try {
+            const result = await tokenContract!.getStayGoriDepositToken(wallet.address, tokenId);
+
+            // BigNumber オブジェクトから通常の数値に変換した tokenIds 配列
+            const tokenIdsArray = result[0].map((value: ethers.BigNumber) =>
+              value.toNumber()
+            );
+
+            // 新しいステータス配列を作成
+            const newStayStatusArray = ["1", "2", "3", "4", "5"].map(
+              (tokenId) => {
+                const amountIndex = tokenIdsArray.indexOf(Number(tokenId));
+                return amountIndex !== -1
+                  ? Number(ethers.utils.formatEther(result[1][amountIndex]) || 0)
+                  : 0;
+              }
+            );
+
+            // 新しいステートをセット
+            // 現在のステートと新しいステートが同じでない場合のみセット
+            if (!isEqual(newStayStatusArray, StayStatusArray)) {
+              setStayStatusArray(newStayStatusArray);
+            }
+          } catch (error) {
+            console.error("Error fetching GoriColle info:", error);
+          }
+        };
+
+        fetchData();
+      }
+
+    }, [tokenId, isContractLoading]);
 
     return (
       <>
@@ -131,8 +169,14 @@ export default function GoriMap(props: Props) {
           {props.mode === "GoriColle" && (
             <>
               <p>tokenId:{selectedMarker.tokenId.toString()}</p>
+              <p>owner:{selectedMarker.owner.toString().slice(0, 6) + "..."}</p>
+              {selectedMarker.owner.toString()===wallet.address?(
               <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
-              {isModalOpen && (
+              ):(
+                <></>
+              )}
+
+              {isModalOpen &&  wallet.address && selectedMarker.owner.toString()!==wallet.address &&(
                 <Modal
                   onClose={closeModal}
                   opened={isModalOpen}
