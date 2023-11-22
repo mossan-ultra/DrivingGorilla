@@ -157,7 +157,7 @@ export default function GoriMap(props: Props) {
                         )}
                         <Chart />
                       </div>
-                      <div className={`${GoriBattleStyle.item} ${GoriBattleStyle.centeredItem}`}>
+                      <div className={GoriBattleStyle.item}>
                         <p>{OpponentGoriParam.name}</p>
                         {OpponentGoriParam.imageURI && (
                           <Image
