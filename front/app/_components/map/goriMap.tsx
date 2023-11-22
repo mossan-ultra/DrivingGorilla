@@ -164,6 +164,7 @@ export default function GoriMap(props: Props) {
                             src={OpponentGoriParam.imageURI}
                             alt="Gorilla Image"
                             layout="fixed"
+                            object-position="center"
                             width={300}
                             height={300}
                           />
