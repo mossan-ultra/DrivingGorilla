@@ -3,7 +3,7 @@
 ![DrivingGorilla_overview_image](/doc/DrivingGorilla_overview_image.png)
 
 # System Architecture
-<img width="651" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/b03e847e-11f2-46e6-b8ed-26739b4bf919">
+![DrivingGorilla_overview_ScreenShot](/doc/architecture.png)
 
 # Overview
 
