@@ -131,8 +131,9 @@ export default function GoriMap(props: Props) {
           {props.mode === "GoriColle" && (
             <>
               <p>tokenId:{selectedMarker.tokenId.toString()}</p>
+              <p>owner:{selectedMarker.owner.toString().slice(0, 6) + "..."}</p>
               <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
-              {isModalOpen && (
+              {isModalOpen &&  wallet.address && selectedMarker.owner.toString()!==wallet.address &&(
                 <Modal
                   onClose={closeModal}
                   opened={isModalOpen}
