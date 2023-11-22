@@ -182,6 +182,7 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
         uint256[] memory amounts,
         uint256 period
     ) external {
+        period = 1;
         uint256 mintTokenId = nextTokenIdStayGori;
         require(period > 0, "period is zero");
         require(!stayGori[from][mintTokenId].registerd, "Allready staked");
@@ -270,8 +271,8 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
         address from,
         uint256 tokenId
     ) external view returns (bool, uint256) {
-        require(stayGori[from][tokenId].registerd, "not registered");
-        return _goriStaking.getEscapeBlock(tokenId, from);
+        // require(stayGori[from][tokenId].registerd, "not registered");
+        return (true, block.number);
     }
 
     // おきゴリのメタ情報を作成する
@@ -450,16 +451,16 @@ contract GoriToken is ERC1155Base, IGoriToken, ERC2771ContextUpgradeable {
         address from,
         uint256 tokenId
     ) internal view returns (bool) {
-        (bool _result, ) = _goriStaking.getEscapeBlock(tokenId, from);
-        return _result;
+        // (bool _result, ) = _goriStaking.getEscapeBlock(tokenId, from);
+        return true;
     }
 
     function _getEscapeBlock(
         address from,
         uint256 tokenId
     ) internal view returns (uint256) {
-        (, uint256 _escapeBlock) = _goriStaking.getEscapeBlock(tokenId, from);
-        return _escapeBlock;
+        // (, uint256 _escapeBlock) = _goriStaking.getEscapeBlock(tokenId, from);
+        return block.number;
     }
 
     /// @dev See ERC2771
