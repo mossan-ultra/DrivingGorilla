@@ -81,9 +81,14 @@ export default function GoriMap(props: Props) {
             const newStayStatusArray = ["1", "2", "3", "4", "5"].map(
               (tokenId) => {
                 const amountIndex = tokenIdsArray.indexOf(Number(tokenId));
+
+
+
+
+                
                 //console.log(tokenId, amountIndex);
                 return amountIndex !== -1
-                  ? Number(result[1][amountIndex] || 0)
+                  ? Number(ethers.utils.formatEther(result[1][amountIndex]) || 0)
                   : 0;
               }
             );
