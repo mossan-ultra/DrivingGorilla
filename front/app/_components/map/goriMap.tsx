@@ -150,21 +150,22 @@ export default function GoriMap(props: Props) {
                             src={props.myImageUrl}
                             alt="Gorilla Image"
                             layout="fixed"
-                            width={100}
-                            height={100}
+                            object-position="center"
+                            width={300}
+                            height={300}
                           />
                         )}
                         <Chart />
                       </div>
-                      <div className={GoriBattleStyle.item}>
+                      <div className={`${GoriBattleStyle.item} ${GoriBattleStyle.centeredItem}`}>
                         <p>{OpponentGoriParam.name}</p>
                         {OpponentGoriParam.imageURI && (
                           <Image
                             src={OpponentGoriParam.imageURI}
                             alt="Gorilla Image"
                             layout="fixed"
-                            width={100}
-                            height={100}
+                            width={300}
+                            height={300}
                           />
                         )}
                         <ChartOkigoriModal

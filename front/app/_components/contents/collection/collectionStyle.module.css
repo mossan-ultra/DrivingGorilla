@@ -88,14 +88,21 @@
 }
 
 .item {
-  flex: 1;
+
   padding: 10px;
   border: 1px solid #ccc;
   box-sizing: border-box;
+  text-align: center;
+  justify-content: center; /* 水平方向に中央揃え */
 }
 
 .buttonContainer {
   text-align: center;
+}
+.centeredItem {
+  text-align: center;
+  margin:0 auto;
+  
 }
 
 .battleButton {
