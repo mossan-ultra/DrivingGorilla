@@ -2,15 +2,67 @@
 
 ![DrivingGorilla_overview_image](/doc/DrivingGorilla_overview_image.png)
 
-# System Architecture
-![DrivingGorilla_overview_ScreenShot](/doc/architecture.png)
-
-# Overview
-
-<p>「自分だけの相棒ゴリラと冒険（ドライブ）に出かけよう！」</p> 
-<p>相棒ゴリラはドライブ内容に応じて手に入るTokenで成長し、プレイヤーの相棒ゴリラ同士でバトルをしたりランキングを競い合える</p>
+PWAアプリ：[https://front-inky-one.vercel.app/](https://front-inky-one.vercel.app/)<br>
+GitHub：[https://github.com/mossan-ultra/DrivingGorilla](https://github.com/mossan-ultra/DrivingGorilla)
 
 ![DrivingGorilla_overview_ScreenShot](/doc/DrivingGorilla_overview_ScreenShot.png)
+「走る歓び」を進化させ続け、お客様の「生きる歓び」に繋げよう。
+<p>「自分だけの相棒ゴリラと冒険（ドライブ）に出かけよう！」</p> 
+相棒ゴリラはドライブ内容に応じて手に入るTokenで成長し、プレイヤーの相棒ゴリラ同士でバトルをしたりランキングを競い合える。
+<br><br>
+
+> 本アプリではweb3の特徴の一つである「分散化と信頼性」により、<br>
+運転データをオンチェーン上に、改竄不可能な民主化された情報として記録できます。<br>
+> 更に「ユーザーのデータ権利」として相棒ゴリラNFT、ご当地NFTをブロックチェーンのデータとして取り扱えるようになります。<br>
+> あなたと相棒ゴリラとの冒険（ドライブ）の記録と思い出は、世代を超えてブロックチェーンに歴史として刻まれる事になります。
+
+# Problems
+
+- 自動車業界は、生活者や世界のデジタル化から遅れている
+- 移動体験の感動を妨げる課題も多い
+
+# Problems while driving and solutions with this app
+
+| Problems | Details | solutions |
+| :------: | :-------: | :-------: |
+| 渋滞 | 渋滞の時間をどう楽しむか、そもそも渋滞を防げないのか | 渋滞中に周辺のご当地NFTや置きゴリとバトルしたりできる |
+| 居眠り運転 | 居眠り運転をどう防ぐか、アラート以外で防げないのか | 相棒ゴリラとインタラクティブな会話により居眠り運転を抑止する |
+| マンネリ化した移動体験 | 通勤・通学等の移動のマンネリ化を防げないか、より楽しいものに出来ないか | 安全運転、エコドライブでトークンが得られる、見たことのないご当地NFTや置きゴリとの出会い |
+| 長距離移動 | 長距離移動の疲れを減らせないか長距離運転を無くせないのか | 運転時間、運転距離でもトークンが得られる |
+| 退屈な道中 | 同乗者や子供がゲームや動画以外で、もっと楽しく暇つぶしできないか | 相棒ゴリラとインタラクティブな会話で盛り上がったり、手に入れたご当地NFTを眺めたりできる |
+
+### Drive to Earn
+
+1. 安全運転、エコドライブ、運転時間、運転距離、給油回数によりトークンが得られます。
+2. 相棒ゴリラを全世界の好きなエリアに置きゴリラとして配置する事でステーキングによる報酬トークンが得られます。
+
+### Use for Fun!
+
+1. 全国の相棒ゴリラホルダーと相棒ゴリラが手に入れたトークン量をランキングでリアルタイムに競い合える。
+2. あなただけの相棒ゴリラと全国のユーザーが配置した置きゴリラでバトルする事ができる。
+3. ドライブ中に手に入れる特別なご当地NFTを自慢できる。
+4. 特別なご当地NFTを持っている人だけへの特典を提供。
+（ディーラーでノベルティと引き換え、特別なDAOコミュニティへの参加など）
+
+### Drive
+
+1. 自分だけの相棒ゴリラNFTが得られる（生成AIにより自動生成したショートムービーのNFTアート）
+2. 安全運転、エコドライブ、運転時間、運転距離、給油回数により経験値トークンが得られる
+3. 特定のスポットにドライブで訪れる事によりインタラクティブで美しい特別な装備NFTを手に入れる事ができる
+
+### Entertainment
+
+1. 自分だけの相棒ゴリラを安全運転やエコドライブなどで得られる経験値トークンや、ご当地NFTで成長させる事ができる
+2. 全世界のユーザーの相棒ゴリラとランキングで競い合うことができる
+3. 相棒ゴリラを全世界の好きなエリアに置きゴリラとして配置する事でステーキングすることができる
+4. ドライブを通じて全世界の相棒ゴリラとバトルを楽しむことができる
+5. 相棒ゴリラにはChatGPT、音声合成、音声認識を搭載しており、ドライブ中に音声で会話することができる
+6. あなたの発話に対する相棒ゴリラの感情をAIによる感情分析でPositive、Natural、Negativeで表現します（感情表現により相棒ゴリラのアニメーションが変化します）
+7. 今回の相棒ゴリラは神社巡りが大好きで、マスクメロンが大好物です。魔王も倒したことがあるようです。話しかけてみて下さい。
+
+| Positive | Natural | Negative |
+| :------: | :-------: | :-------: |
+| ![Positive Gorilla](/front/public/gif/Chatbot_PositiveImage.gif) | ![Neutral Gorilla](/front/public/gif/Chatbot_NeutralImagen.gif) | ![Negative Gorilla](/front/public/gif/Chatbot_NegativeImage.gif) |
 
 # Requirements
 
@@ -32,6 +84,9 @@ mint条件=安全運転、エコドライブ、運転時間、運転距離、給
 デモアプリを試したい場合は 
 [コチラ](https://front-inky-one.vercel.app/) 
 から試す事もできます</p>
+
+# System Architecture
+![DrivingGorilla_overview_ScreenShot](/doc/architecture.png)
 
 # Things to install in advance
 
@@ -189,7 +244,9 @@ npx next dev
 http://localhost:3000
 ```
 
-# 画面
+# Deck
+
+![DrivingGorilla_overview_ScreenShot](/doc/DrivingGorilla_overview_ScreenShot.png)
 
 ## Sign in
 サインイン画面です。サインインを行うとWeb3Authの認証画面が表示され、認証することで画面遷移します。
@@ -263,6 +320,15 @@ Homeでは相棒ゴリラとトークすることができます。
 | :------: | :-------: |:-------: |:-------: |
 | <img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/ddde29f8-fa08-45bf-9f84-b4b4e7cb404c">| <img width="377" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/53e14283-e858-4713-8217-d9b0ec691b11">|<img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/e82473a5-7ec0-496c-bfa0-9eda215d87f2">|<img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/b25fee16-927b-4c7d-a45c-1e4ed720c0f5">
 
+# 今後実現できるユーザー体験ユーザー体験
+
+1. 分散型ドライバーコミュニティ、分散型広告プラットフォーム、ドライブデータの利活用に繋げる事ができる。<br>
+2. 自分だけの相棒ゴリラのアニメーションをmint時に自動生成して、よりユニークな相棒ゴリラにできる。<br>
+3. 相棒ゴリラの特徴や自車位置、走行データをChatGPTのpromptとして、よりインタラクティブな会話をする事ができる。<br>
+4. 相棒ゴリラの応答感情（Positive、Natural、Negative）をオンチェーンのデータとして残し、過去のドライブシーンの思い出と重ねて振り返る事ができる。<br>
+5. WebGLでビジュアライズしているご当地NFTについて、メタデータにビジュライズに必要な情報を持たせてビジュアライズする。<br>
+6. 走行データの形跡や運転者の目の動きをディープラーニング（画像認識、物体検知など）を活用して、居眠り運転の可能性を検知した時に相棒ゴリラの音声合成をトリガーして運転者に話しかける。<br>
+7. ご当地とコラボレーションして特別なご当地NFTを発行して特定のお店でクーポンとして活用できるようにしたり、広告収入を得たりする。<br>
 
 ## Deploy on Vercel
 
