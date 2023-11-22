@@ -3,7 +3,7 @@ import { useStayGori } from "../../../_hooks/useStayGori";
 import React, { useContext, useEffect, useState } from "react";
 import GoriMap from "../../map/goriMap";
 import { ethers } from "ethers";
-import { Table } from "@mantine/core";
+import { Input, Table } from "@mantine/core";
 import {
   GORITOKEN_CONTRACT_ADDRESS,
   STAKING_CONTRACT_ADDRESS,
@@ -16,6 +16,7 @@ import TokenAbi from "../../../_abi/GoriToken.json";
 import { GelatoContract } from "@/app/gelato/gelatoContract";
 import styles from "./collectionStyle.module.css";
 import { BuddyGoriContext } from "../../../context/buddyGori";
+import { BuildMode, buildMode } from "@/app/_utils/buildMode";
 
 
 enum token {
@@ -47,6 +48,7 @@ export const Collection = () => {
   const [isLoadingData, setIsLoadingData] = useState(true); // ローディングフラグを追加
   const [isModalOpen, setIsModalOpen] = useState(false); // モーダルの可視性を管理するためのステートを追加
   const [modalMessage, setModalMessage] = useState(""); // モーダル内のメッセージを追加
+  const [location, setLocation] = useState("");
   const headers = ["STR", "LUK", "AGI", "DEF", "VIT"];
   interface TableRowProps {
     values: number[];
@@ -262,12 +264,13 @@ export const Collection = () => {
           );
         await contract?.txWithGelate(setApprovalForAll, wallet.provider!, wallet.web3Auth!)
       }
+
       const makeStayGori =
         await contract!.interface.encodeFunctionData("makeStayGori",
           [
             address,
-            meshCode,
-            imageUrl,
+            location.length > 0 ? location : meshCode,
+            '/images/okigori.jpeg',
             indicesAndNonZeroElements[0], // stakingするtokenId  の一覧
             decimalParsedValues, // それぞれのtokenIdに対してステーキングするトークン量（ユーザーが持っているトークン以下の設定）
             period, // おきゴリ期間（単位：BlockNumber
@@ -320,6 +323,17 @@ export const Collection = () => {
                           <TableRow values={selectedValues} isSelectRow />
                         </Table.Tbody>
                       </Table>
+                      {
+                        buildMode() === BuildMode.Develop &&
+                        <Input
+                          placeholder="input Location(develop mode only)"
+                          value={location}
+                          onChange={(event) => setLocation(event.currentTarget.value)}
+                          rightSectionPointerEvents="all"
+                          mt="md"
+                        />
+
+                      }
 
                     </>
                   ) : (
