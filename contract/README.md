@@ -70,4 +70,19 @@ node script/setup.js
 node script/setup_zKatana.js
 ```
 
+# シーケンス図
+##  相棒入手
+![Positive Gorilla](/contract/doc/goridrop.png) 
+
+##  運転データ登録
+![Positive Gorilla](/contract/doc/checkin.png) 
+
+##  チェックイン
+![Positive Gorilla](/contract/doc/checkin.png) 
+
+##  おきゴリ作成
+![Positive Gorilla](/contract/doc/makeStayGori.png) 
+
+##  おきゴリ完了
+![Positive Gorilla](/contract/doc/completeStayGori.png) 
 
