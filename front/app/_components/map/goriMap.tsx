@@ -63,7 +63,6 @@ export default function GoriMap(props: Props) {
 
   const AsyncGoriColleInfo = ({ tokenId }: { tokenId: number }) => {
     const { contract: tokenContract, isLoading: isContractLoading } = useContract(GORITOKEN_CONTRACT_ADDRESS, TokenAbi.abi);
-
     useEffect(() => {
       if (!isContractLoading) {
 
@@ -81,19 +80,11 @@ export default function GoriMap(props: Props) {
             const newStayStatusArray = ["1", "2", "3", "4", "5"].map(
               (tokenId) => {
                 const amountIndex = tokenIdsArray.indexOf(Number(tokenId));
-
-
-
-
-                
-                //console.log(tokenId, amountIndex);
                 return amountIndex !== -1
                   ? Number(ethers.utils.formatEther(result[1][amountIndex]) || 0)
                   : 0;
               }
             );
-
-            //console.log("Setting StayStatusArray:", newStayStatusArray);
 
             // 新しいステートをセット
             // 現在のステートと新しいステートが同じでない場合のみセット
@@ -179,7 +170,12 @@ export default function GoriMap(props: Props) {
             <>
               <p>tokenId:{selectedMarker.tokenId.toString()}</p>
               <p>owner:{selectedMarker.owner.toString().slice(0, 6) + "..."}</p>
+              {selectedMarker.owner.toString()===wallet.address?(
               <AsyncGoriColleInfo tokenId={selectedMarker.tokenId} />
+              ):(
+                <></>
+              )}
+
               {isModalOpen &&  wallet.address && selectedMarker.owner.toString()!==wallet.address &&(
                 <Modal
                   onClose={closeModal}
