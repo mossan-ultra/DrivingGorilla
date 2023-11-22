@@ -150,8 +150,9 @@ export default function GoriMap(props: Props) {
                             src={props.myImageUrl}
                             alt="Gorilla Image"
                             layout="fixed"
-                            width={100}
-                            height={100}
+                            object-position="center"
+                            width={300}
+                            height={300}
                           />
                         )}
                         <Chart />
@@ -163,8 +164,9 @@ export default function GoriMap(props: Props) {
                             src={OpponentGoriParam.imageURI}
                             alt="Gorilla Image"
                             layout="fixed"
-                            width={100}
-                            height={100}
+                            object-position="center"
+                            width={300}
+                            height={300}
                           />
                         )}
                         <ChartOkigoriModal
