@@ -2,8 +2,13 @@
 
 ![DrivingGorilla_overview_image](/doc/DrivingGorilla_overview_image.png)
 
-PWAアプリ：[https://front-inky-one.vercel.app/](https://front-inky-one.vercel.app/)<br>
+Movie：[DrivingGorillaが今スグわかる3分ショートムービー]()
+
+Apps(PWA)：[https://front-inky-one.vercel.app/](https://front-inky-one.vercel.app/)<br>
 GitHub：[https://github.com/mossan-ultra/DrivingGorilla](https://github.com/mossan-ultra/DrivingGorilla)
+<br>
+Astar zKatana：[ [Buddy](https://zkatana.blockscout.com/token/0xFe432277e48a30BC21FC32c3e3ab8b62C5EeB6a6) ] [ [Prison Break](https://zkatana.blockscout.com/token/0xb6E6C614530EFB517Ef3CAcCE089AC367F2CCf77) ]
+
 
 ![DrivingGorilla_overview_ScreenShot](/doc/DrivingGorilla_overview_ScreenShot.png)
 「走る歓び」を進化させ続け、お客様の「生きる歓び」に繋げよう。
@@ -14,14 +19,16 @@ GitHub：[https://github.com/mossan-ultra/DrivingGorilla](https://github.com/mos
 > 本アプリではweb3の特徴の一つである「分散化と信頼性」により、<br>
 運転データをオンチェーン上に、改竄不可能な民主化された情報として記録できます。<br>
 > 更に「ユーザーのデータ権利」として相棒ゴリラNFT、ご当地NFTをブロックチェーンのデータとして取り扱えるようになります。<br>
-> あなたと相棒ゴリラとの冒険（ドライブ）の記録と思い出は、世代を超えてブロックチェーンに歴史として刻まれる事になります。
+> あなたと相棒ゴリラとの冒険（ドライブ）の記録と思い出は、世代を超えてブロックチェーンに歴史として刻まれる。
 
 # Problems
 
 - 自動車業界は、生活者や世界のデジタル化から遅れている
 - 移動体験の感動を妨げる課題も多い
 
-# Problems while driving and solutions with this app
+# Objective
+
+### Problems while driving and solutions with this app
 
 | Problems | Details | solutions |
 | :------: | :-------: | :-------: |
@@ -30,6 +37,8 @@ GitHub：[https://github.com/mossan-ultra/DrivingGorilla](https://github.com/mos
 | マンネリ化した移動体験 | 通勤・通学等の移動のマンネリ化を防げないか、より楽しいものに出来ないか | 安全運転、エコドライブでトークンが得られる、見たことのないご当地NFTや置きゴリとの出会い |
 | 長距離移動 | 長距離移動の疲れを減らせないか長距離運転を無くせないのか | 運転時間、運転距離でもトークンが得られる |
 | 退屈な道中 | 同乗者や子供がゲームや動画以外で、もっと楽しく暇つぶしできないか | 相棒ゴリラとインタラクティブな会話で盛り上がったり、手に入れたご当地NFTを眺めたりできる |
+
+# Deriverables
 
 ### Drive to Earn
 
@@ -49,6 +58,7 @@ GitHub：[https://github.com/mossan-ultra/DrivingGorilla](https://github.com/mos
 1. 自分だけの相棒ゴリラNFTが得られる（生成AIにより自動生成したショートムービーのNFTアート）
 2. 安全運転、エコドライブ、運転時間、運転距離、給油回数により経験値トークンが得られる
 3. 特定のスポットにドライブで訪れる事によりインタラクティブで美しい特別な装備NFTを手に入れる事ができる
+4. 自動車でのお出かけに限らず、Mobility全般、ウォーキング、ランニング、サイクリング、ツーリング、お買い物、タクシーのお供としても利用可能
 
 ### Entertainment
 
@@ -64,29 +74,143 @@ GitHub：[https://github.com/mossan-ultra/DrivingGorilla](https://github.com/mos
 | :------: | :-------: | :-------: |
 | ![Positive Gorilla](/front/public/gif/Chatbot_PositiveImage.gif) | ![Neutral Gorilla](/front/public/gif/Chatbot_NeutralImagen.gif) | ![Negative Gorilla](/front/public/gif/Chatbot_NegativeImage.gif) |
 
+# Success Criteria
+
+| Goal Name | Success Criteria | reason | 
+| :------: | :-------: | :-------: | 
+| 相棒ゴリラNFT数 | 100,00 以上 | 通常アプリのコンセプト検証成功基準として設定する一般的な指針のため |
+| 経験値トークンmint量 | 50,0000,000以上 | 日常の通常利用時にmintされる想定のトークン量のため |
+| 平均レビュー点数 | 4.0以上 | 5段階の満足度評価を設定した場合、カスタマーサクセスの検証成功基準として設定する一般的な指針のため |
+
 # Requirements
 
-- チェーンはzKatanaを採用
-- UX向上を目的にweb3Authでの認証可能とし、AAに対応
+- ネットワークチェーンは「Astar zKEVM」テストネットのzKatanaを採用（ガス代低減による運用費節減）
+- UI/UX向上を目的にweb3Authでの認証可能とし、Account Abstractionに対応（ガスレス）
 - 運転データをオンチェーン上に保存し、データに応じた経験値トークンをmint<br>
 mint条件=安全運転、エコドライブ、運転時間、運転距離、給油回数
-- 自分だけの相棒ゴリラ(NFTアート)を貰える
+- PWA化により特定のOSやデバイスに依存せず、PC、スマートフォン、タブレットなど、どの端末でもアプリを楽しめる
+- 自分だけのインタラクティブな相棒ゴリラ(NFTアニメーションアート)を貰える
 - ChatGPTを搭載した相棒ゴリラと音声対話チャットで繋がりのある会話のキャッチボールが可能
-- 地図上に相棒ゴリラの分身を置きゴリとして配置可能
+- 全世界の地図上の好きな場所に相棒ゴリラの分身を置きゴリとして配置可能
 - 置きゴリにはステーキング機能を実装（但し、一定確率で脱獄し消滅）
 - 特定のスポットにチェックインすることでご当地装備NFTを入手する事ができる
 - 経験値トークンと装備NFTで相棒ゴリラが強くなりステータスとランキングを確認できる
 
-# Getting Started
-
-<p>ここからは本アプリをローカルPCで試験動作させるための手順の説明になります</p>
-
-デモアプリを試したい場合は 
-[コチラ](https://front-inky-one.vercel.app/) 
-から試す事もできます</p>
-
 # System Architecture
 ![DrivingGorilla_overview_ScreenShot](/doc/architecture.png)
+
+※web3トランザクションのシーケンスは[ContractのREADME](/contract/README.md)を参照
+
+# Architecture Decision Record
+
+| Architecture | Decision Record |  
+| :------: | :-------: |  
+| Astar zKEVM |  | 
+| Gelato |  | 
+| web3Auth |  | 
+| Progressive Web Apps | 特定のOSやデバイスに依存せず開発、運用などのコストを低減が可能 | 
+| Azure OpenAI | 安全性の高い他の多彩な他のAIサービスとの併用、クラウドベースによるスムーズな導入と優れたコスト管理 | 
+| gpt-35-turbo-16k | 一度に日本語だと約8000文字を処理可能、且つgpt-4と比較するとコストを大幅に低減可能 | 
+| Azure AI Speech-Sdk | 高品質な多国語の音声合成、音声認識が可能（今回はja-jpで最適化） |
+| Azure AI Language-Text | OpenAI、Speech-Sdkと併用が容易且つ、多国語の対応が可能 |
+| Stable Diffusion Web UI | 高品質なアニメーション動画を短期間で製作可能 |
+
+# Deck
+
+![DrivingGorilla_overview_ScreenShot](/doc/DrivingGorilla_overview_ScreenShot.png)
+
+## Sign in
+サインイン画面です。サインインを行うとWeb3Authの認証画面が表示され、認証することで画面遷移します。
+
+相棒ゴリラを持っていない場合→初回画面
+
+相棒ゴリラを持っている場合→Home画面
+
+<img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/81e1b0dd-ac15-407e-8622-5b895ed4bc8a">
+
+## 初回画面
+相棒ゴリラを持っていない時に表示される画面です。
+
+相棒ゴリラを生成することができます。
+
+<img width="377" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/4cce1bb7-5b2f-4ef1-a2b2-676ac763d085">
+
+## Home
+Homeでは相棒ゴリラとトークすることができます。
+
+マイクアイコンをタップ後話しかけることで音声で返信してくれます。
+
+| 相棒 | チャットログ |
+| :------: | :-------: |
+| <img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/1835726c-aa44-42f8-87d3-b89eb455c1b4">| <img width="377" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/a1e097c1-ecd1-430d-b392-6fb0f1a42d84">
+
+## Status
+ステータス表示は相棒ゴリラのステータスと装備NFTの総和が表示されます。
+
+また、ステータスランキングを確認することができます。
+
+<img width="374" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/d6b514c6-1637-441e-9798-fcdc6699b6cd">
+
+## Equipment
+獲得した装備を確認する画面です。
+
+<img width="374" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/11116ff3-dd4f-40a4-99ec-f47c343ee0f9">
+
+## Drive
+現在位置がマップ上にプロットされます。
+
+マイクアイコンをタップ後話しかけることで音声で返信してくれます。
+
+右下のチェックインボタンを押すとチェックインすることができ、特定ポイントであれば装備NFTがミントされます。
+
+| Drive画面 | 装備NFTミント画面 |
+| :------: | :-------: |
+| <img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/a80e0077-0bab-41d9-ba1a-fbb4b2cb4fa3">| <img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/d0749787-d6d5-4dea-a3a9-abb5c6a5fb25">
+
+## Collection
+おきゴリの作成、表示、ゴリラバトルを行う画面です。
+
+おきゴリは相棒ゴリラのトークンを分け与えることで作成できます。
+
+作成時に期間設定が可能で、期間を満了すると預けたトークン＋αを持って帰ってきます。
+
+ただし、一定確率で脱走することがあり、脱走した場合預けたトークンは無くなります。
+
+| Collection画面 | おきゴリバトル | おきゴリ作成　|
+| :------: | :-------: | :-------: |
+| <img width="374" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/0ffad9a4-ecc8-430e-9fc7-5822ecb18702">　| <img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/5dd472c5-6128-4580-99e4-d997ed6d2a6c"> | <img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/bf54748e-f089-402f-8622-5c69141d2a0e">
+
+## 運転データの登録
+アプリを起動すると一日一回運転データを登録する画面が表示されます。
+
+この画面では運転データを登録することで前日の運転成績に応じたトークン（経験値）が払い出されます。
+
+また、おきゴリの期間が満了していた場合、おきゴリ結果を確認することができます。
+
+| 運転データ登録 | 経験値獲得 |脱走ゴリラ |帰ってきたゴリラ |
+| :------: | :-------: |:-------: |:-------: |
+| <img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/ddde29f8-fa08-45bf-9f84-b4b4e7cb404c">| <img width="377" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/53e14283-e858-4713-8217-d9b0ec691b11">|<img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/e82473a5-7ec0-496c-bfa0-9eda215d87f2">|<img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/b25fee16-927b-4c7d-a45c-1e4ed720c0f5">
+
+# 今後実現できるユーザー体験
+
+1. ドライブデータの利活用のために、分散型ドライバーコミュニティ、分散型広告プラットフォームに繋げて活かす事ができる。<br>
+2. 自分だけの相棒ゴリラのアニメーションをmint時に自動生成して、よりユニークな相棒ゴリラにできる。<br>
+3. 相棒ゴリラの特徴や自車位置、走行データをChatGPTのpromptとして、よりインタラクティブな会話をする事ができる。<br>
+4. 相棒ゴリラの応答感情（Positive、Natural、Negative）をオンチェーンのデータとして残し、過去のドライブシーンの思い出と重ねて振り返る事ができる。<br>
+5. WebGLでビジュアライズしているご当地NFTについて、メタデータにビジュライズに必要な情報を持たせてビジュアライズしたり、レアリティを付加できる。<br>
+6. 走行データの形跡や運転者の目の動きをディープラーニング（画像認識、物体検知など）を活用して、居眠り運転の可能性を検知した時に相棒ゴリラの音声合成をトリガーして運転者に話しかける。<br>
+7. 特別なフレーズ（「hey!Gorilla」など）を頭に挟む事で相棒ゴリラと完全ハンズフリー通話を実現する。<br>
+8. 相棒ゴリラに尋ねると近くのご当地NFTや置きゴリの場所まで音声ナビゲーションしてくれる。<br>
+9. 各国向けのローカライズと多言語対応する事で海外旅行、海外出張時も楽しむ事ができるようにできる。（現在も相棒ゴリラにNativeな英語で話しかけると英語で返してくれる事もあります）<br>
+10. ご当地とコラボレーションして特別なご当地NFTを発行して特定のお店でクーポンとして活用できるようにしたり、広告収入を得たりする。<br>
+
+# Getting Started
+
+<p>ここからは本アプリをローカルPC上で試験動作させるための手順の説明になります</p>
+
+>※デモアプリを試したい場合は 
+[コチラ](https://front-inky-one.vercel.app/) 
+から試す事もできます</p>
 
 # Things to install in advance
 
@@ -244,94 +368,6 @@ npx next dev
 http://localhost:3000
 ```
 
-# Deck
-
-![DrivingGorilla_overview_ScreenShot](/doc/DrivingGorilla_overview_ScreenShot.png)
-
-## Sign in
-サインイン画面です。サインインを行うとWeb3Authの認証画面が表示され、認証することで画面遷移します。
-
-相棒ゴリラを持っていない場合→初回画面
-
-相棒ゴリラを持っている場合→Home画面
+サインイン画面が表示されれば完了です
 
 <img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/81e1b0dd-ac15-407e-8622-5b895ed4bc8a">
-
-## 初回画面
-相棒ゴリラを持っていない時に表示される画面です。
-
-相棒ゴリラを生成することができます。
-
-<img width="377" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/4cce1bb7-5b2f-4ef1-a2b2-676ac763d085">
-
-## Home
-Homeでは相棒ゴリラとトークすることができます。
-
-マイクアイコンをタップ後話しかけることで音声で返信してくれます。
-
-| 相棒 | チャットログ |
-| :------: | :-------: |
-| <img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/1835726c-aa44-42f8-87d3-b89eb455c1b4">| <img width="377" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/a1e097c1-ecd1-430d-b392-6fb0f1a42d84">
-
-## Status
-ステータス表示は相棒ゴリラのステータスと装備NFTの総和が表示されます。
-
-また、ステータスランキングを確認することができます。
-
-<img width="374" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/d6b514c6-1637-441e-9798-fcdc6699b6cd">
-
-## Equipment
-獲得した装備を確認する画面です。
-
-<img width="374" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/11116ff3-dd4f-40a4-99ec-f47c343ee0f9">
-
-## Drive
-現在位置がマップ上にプロットされます。
-
-マイクアイコンをタップ後話しかけることで音声で返信してくれます。
-
-右下のチェックインボタンを押すとチェックインすることができ、特定ポイントであれば装備NFTがミントされます。
-
-| Drive画面 | 装備NFTミント画面 |
-| :------: | :-------: |
-| <img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/a80e0077-0bab-41d9-ba1a-fbb4b2cb4fa3">| <img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/d0749787-d6d5-4dea-a3a9-abb5c6a5fb25">
-
-## Collection
-おきゴリの作成、表示、ゴリラバトルを行う画面です。
-
-おきゴリは相棒ゴリラのトークンを分け与えることで作成できます。
-
-作成時に期間設定が可能で、期間を満了すると預けたトークン＋αを持って帰ってきます。
-
-ただし、一定確率で脱走することがあり、脱走した場合預けたトークンは無くなります。
-
-| Collection画面 | おきゴリバトル | おきゴリ作成　|
-| :------: | :-------: | :-------: |
-| <img width="374" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/0ffad9a4-ecc8-430e-9fc7-5822ecb18702">　| <img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/5dd472c5-6128-4580-99e4-d997ed6d2a6c"> | <img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/bf54748e-f089-402f-8622-5c69141d2a0e">
-
-## 運転データの登録
-アプリを起動すると一日一回運転データを登録する画面が表示されます。
-
-この画面では運転データを登録することで前日の運転成績に応じたトークン（経験値）が払い出されます。
-
-また、おきゴリの期間が満了していた場合、おきゴリ結果を確認することができます。
-
-| 運転データ登録 | 経験値獲得 |脱走ゴリラ |帰ってきたゴリラ |
-| :------: | :-------: |:-------: |:-------: |
-| <img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/ddde29f8-fa08-45bf-9f84-b4b4e7cb404c">| <img width="377" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/53e14283-e858-4713-8217-d9b0ec691b11">|<img width="375" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/e82473a5-7ec0-496c-bfa0-9eda215d87f2">|<img width="376" alt="image" src="https://github.com/mossan-ultra/DrivingGorilla/assets/95908731/b25fee16-927b-4c7d-a45c-1e4ed720c0f5">
-
-# 今後実現できるユーザー体験ユーザー体験
-
-1. 分散型ドライバーコミュニティ、分散型広告プラットフォーム、ドライブデータの利活用に繋げる事ができる。<br>
-2. 自分だけの相棒ゴリラのアニメーションをmint時に自動生成して、よりユニークな相棒ゴリラにできる。<br>
-3. 相棒ゴリラの特徴や自車位置、走行データをChatGPTのpromptとして、よりインタラクティブな会話をする事ができる。<br>
-4. 相棒ゴリラの応答感情（Positive、Natural、Negative）をオンチェーンのデータとして残し、過去のドライブシーンの思い出と重ねて振り返る事ができる。<br>
-5. WebGLでビジュアライズしているご当地NFTについて、メタデータにビジュライズに必要な情報を持たせてビジュアライズする。<br>
-6. 走行データの形跡や運転者の目の動きをディープラーニング（画像認識、物体検知など）を活用して、居眠り運転の可能性を検知した時に相棒ゴリラの音声合成をトリガーして運転者に話しかける。<br>
-7. ご当地とコラボレーションして特別なご当地NFTを発行して特定のお店でクーポンとして活用できるようにしたり、広告収入を得たりする。<br>
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
