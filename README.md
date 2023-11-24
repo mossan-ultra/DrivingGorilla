@@ -2,7 +2,7 @@
 
 ![DrivingGorilla_overview_image](/doc/DrivingGorilla_overview_image.png)
 
-Movie：[DrivingGorillaが今スグわかる3分ショートムービー]()
+Movie：[DrivingGorillaが今スグわかる3分ショートムービー](https://www.youtube.com/watch?v=dQJWNGRtzlk)
 
 Apps(PWA)：[https://front-inky-one.vercel.app/](https://front-inky-one.vercel.app/)<br>
 GitHub：[https://github.com/mossan-ultra/DrivingGorilla](https://github.com/mossan-ultra/DrivingGorilla)
