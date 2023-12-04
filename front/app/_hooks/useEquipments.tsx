@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { base64Decode } from "../_utils/common";
 import { getContract } from "../_utils/contract";
 import { WalletContext } from "../context/wallet";
+import { add } from "lodash";
 
 // 装備のデータ
 export type Equipment = {
@@ -44,10 +45,29 @@ export const useEquipments = (walletAddress: string) => {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const metaMap: EqupmentMeta[] = []
+  const [reload, setReload] = useState(true);
+  const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
+
+  useEffect(() => {
+    (async () => {
+      contract!.on(contract!.filters.EquipmentMinted(wallet.address, null), () => {
+        setReload(true)
+      });
+      contract!.on(contract!.filters.TransferSingle(null, null, null, null, null), (operator, from, to, id, amount) => {
+        if (from === wallet.address && to === ADDRESS_ZERO && Number(id) >= 1001 && Number(id) <= 5000) {
+          setReload(true)
+        }
+      });
+    })();
+
+  }, [])
 
   useEffect(() => {
     // 財布がつながっていない場合は処理をしない
+    if (!reload) return;
+
     if (wallet.connected) {
+      setIsLoading(true);
       (async () => {
         // 発行されたEquipmentのTokenIDのログ(Event)を取得
         // 装備はメタ情報が変わらない前提なので、Event検索でおk
@@ -91,10 +111,11 @@ export const useEquipments = (walletAddress: string) => {
 
         setEquipments(tempEquipments);
         setIsLoading(false);
+        setReload(false)
 
       })();
     }
-  }, [wallet]);
+  }, [wallet, reload]);
 
   return {
     equipments,
